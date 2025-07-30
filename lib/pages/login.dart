@@ -42,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      buildLogo(),
                       const SizedBox(height: 20),
                       buildTextField(
                         'ชื่อผู้ใช้',
@@ -70,20 +69,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildLogo() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30.0),
-        child: SizedBox(
-          width: 120,
-          height: 120,
-          child: Image.asset('assets/images/cat.jpg', fit: BoxFit.cover),
         ),
       ),
     );

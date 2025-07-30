@@ -226,10 +226,10 @@ class _OdrawPageState extends State<OdrawPage> {
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(
-        selectedIndex: _selectedIndex, // ตัวแปรเก็บตำแหน่งของปุ่มที่เลือก
+        selectedIndex: _selectedIndex,
         onDestinationSelected: (int index) {
           setState(() {
-            _selectedIndex = index; // อัปเดตตำแหน่งของปุ่มที่เลือก
+            _selectedIndex = index;
           });
         },
         screenSize: MediaQuery.of(context).size,
