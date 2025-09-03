@@ -16,27 +16,34 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
   TextEditingController amount = TextEditingController();
+
+  // ฟังก์ชันสำหรับจัดการการลงทะเบียน
+  void _register() {
+    // TODO: Implement registration logic here.
+    // For example, validate inputs and make an API call.
+    log('Username: ${username.text}');
+    log('Email: ${email.text}');
+    log('Password: ${password.text}');
+    log('Confirm Password: ${confirmpassword.text}');
+    log('Amount: ${amount.text}');
+
+    // You can show a dialog or navigate to another page on success/failure.
+  }
+
   String url = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE1F5FE),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
+      body: Center(
+        // Wrap with Center to center the content vertically and horizontally
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                // ใส่รูปโลโก้ด้านนอก Container
-                Image.asset(
-                  'assets/images/Screenshot (1723).png', // ระบุ path ของรูปโลโก้
-                  height: 150, // ลดขนาดโลโก้
-                  width: 150,
-                ),
-                buildRegisterBox(context),
-              ],
+              children: [buildRegisterBox(context)],
             ),
           ),
         ),
@@ -58,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
           const Text(
             'สมัครสมาชิก',
             style: TextStyle(
-              fontSize: 16, // ขนาดฟอนต์ของหัวข้อ
+              fontSize: 24, // ขนาดฟอนต์ของหัวข้อ
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -82,13 +89,16 @@ class _RegisterPageState extends State<RegisterPage> {
             obscureText: true,
           ),
           const SizedBox(height: 12),
-          // buildTextField('กรุณาระบุยอดฝากที่ต้องการฝาก', 'ระบบุจำนวนยอดฝาก',
-          //     controller: amount),
-          // const SizedBox(height: 12),
-          // const Text(
-          //   'ขั้นต่ำ 100 บาท',
-          //   style: TextStyle(fontSize: 12), // ลดขนาดฟอนต์
-          // ),
+          buildTextField(
+            'กรุณาระบุยอดฝากที่ต้องการฝาก',
+            'ระบบุจำนวนยอดฝาก',
+            controller: amount,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            '*ยอดขั้นต่ำ 100 บาท',
+            style: TextStyle(fontSize: 12, color: Colors.red), // ลดขนาดฟอนต์
+          ),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -106,11 +116,24 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: const Text(
                     'เข้าสู่ระบบ',
                     style: TextStyle(
-                      fontSize: 14, // ขนาดฟอนต์ของปุ่ม
-                      color: Color.fromARGB(255, 255, 0, 0),
+                      fontSize: 16, // ขนาดฟอนต์ของปุ่ม
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildButton(
+                context,
+                'สมัครสมาชิก', // เปลี่ยนข้อความเป็น 'สมัครสมาชิก'
+                const Color(0xFFFFF59D),
+                Colors.black,
+                _register, // เรียกใช้ฟังก์ชัน _register
               ),
             ],
           ),
@@ -136,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 12, // ขนาดฟอนต์ของ Label
+              fontSize: 15, // ขนาดฟอนต์ของ Label
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -154,6 +177,26 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ],
       ),
+    );
+  }
+
+  // ฟังก์ชันสร้างปุ่ม
+  Widget buildButton(
+    BuildContext context,
+    String text,
+    Color backgroundColor,
+    Color textColor,
+    VoidCallback onPressed,
+  ) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: textColor,
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      child: Text(text),
     );
   }
 }
