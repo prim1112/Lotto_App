@@ -1,6 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:lotto_application/pages/customer/homepage.dart';
+import 'dart:convert';
 import 'package:lotto_application/pages/register.dart';
+import 'package:lotto_application/pages/owner/Owner_draw.dart';
+import 'package:lotto_application/model/request/login_request_model.dart';
+import 'package:lotto_application/model/response/login_response_model.dart';
+import 'package:lotto_application/config/api_endpoints.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -46,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20), // Adjusted spacing
                   buildTextField(
-                    'อีเมล', // Changed to Thai to match screenshot
-                    'กรอกอีเมล',
+                    'ชื่อผู้ใช้', // Changed to Thai to match screenshot
+                    'กรอกชื่อผู้ใช้',
                     controller: email,
                   ),
                   const SizedBox(height: 25),
@@ -155,11 +162,60 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // CHANGED: This is the function for the login button
-  void _login() {
-    // TODO: Implement login logic here
-    log('Login button pressed!');
-    log('Email: ${email.text}');
-    log('Password: ${password.text}');
+  void _login() async {
+    try {
+      // 1. Create a request model instance
+      final requestModel = LoginRequest(
+        username: email.text.trim(),
+        password: password.text.trim(),
+      );
+
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.login),
+        headers: {'Content-Type': 'application/json'},
+        // 2. Use the generated function to convert the model to a JSON string
+        body: loginRequestToJson(requestModel),
+      );
+
+      if (response.statusCode == 200) {
+        // --- Login Successful ---
+        // 3. Use the generated function to parse the response string into a model
+        final loginResponse = loginResponseFromJson(response.body);
+        final String userRole =
+            loginResponse.user.role; // 4. Access data safely
+
+        log(
+          'Login successful for user: ${loginResponse.user.username}, role: $userRole',
+        );
+
+        if (userRole == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const OdrawPage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Homepage()),
+          );
+        }
+      } else {
+        // --- Login Failed ---
+        final responseData = jsonDecode(response.body);
+        final String errorMessage =
+            responseData['message'] ?? 'An unknown error occurred.';
+        log('Login failed: $errorMessage');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      }
+    } catch (e) {
+      // --- Network or other exceptions ---
+      log('An error occurred during login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not connect to the server.')),
+      );
+    }
   }
 
   // CHANGED: Renamed function to follow convention

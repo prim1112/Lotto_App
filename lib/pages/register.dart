@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:lotto_application/config/api_endpoints.dart';
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -10,27 +13,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String text = '';
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
   TextEditingController amount = TextEditingController();
-
-  // ฟังก์ชันสำหรับจัดการการลงทะเบียน
-  void _register() {
-    // TODO: Implement registration logic here.
-    // For example, validate inputs and make an API call.
-    log('Username: ${username.text}');
-    log('Email: ${email.text}');
-    log('Password: ${password.text}');
-    log('Confirm Password: ${confirmpassword.text}');
-    log('Amount: ${amount.text}');
-
-    // You can show a dialog or navigate to another page on success/failure.
-  }
-
-  String url = '';
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           const SizedBox(height: 12), // ลดระยะห่าง
           buildTextField('ชื่อผู้ใช้', 'กรอกชื่อผู้ใช้', controller: username),
-          const SizedBox(height: 12),
-          buildTextField('อีเมล', 'กรอกอีเมลของคุณ', controller: email),
           const SizedBox(height: 12),
           buildTextField(
             'รหัสผ่าน',
@@ -128,13 +114,15 @@ class _RegisterPageState extends State<RegisterPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildButton(
-                context,
-                'สมัครสมาชิก', // เปลี่ยนข้อความเป็น 'สมัครสมาชิก'
-                const Color(0xFFFFF59D),
-                Colors.black,
-                _register, // เรียกใช้ฟังก์ชัน _register
-              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : buildButton(
+                      context,
+                      'สมัครสมาชิก',
+                      const Color(0xFFFFF59D),
+                      Colors.black,
+                      _register,
+                    ),
             ],
           ),
         ],
@@ -198,5 +186,84 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       child: Text(text),
     );
+  }
+
+  // ฟังก์ชันสำหรับจัดการการลงทะเบียน
+  void _register() async {
+    // --- 1. Input Validation ---
+    if (username.text.isEmpty ||
+        password.text.isEmpty ||
+        confirmpassword.text.isEmpty ||
+        amount.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกข้อมูลให้ครบทุกช่อง')),
+      );
+      return;
+    }
+
+    if (password.text != confirmpassword.text) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('รหัสผ่านไม่ตรงกัน')));
+      return;
+    }
+
+    final double? depositAmount = double.tryParse(amount.text);
+    if (depositAmount == null || depositAmount < 100) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ยอดฝากขั้นต่ำคือ 100 บาท')));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // --- 2. API Call ---
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.register),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username.text.trim(),
+          'password': password.text.trim(),
+          'amount': depositAmount,
+        }),
+      );
+
+      if (!mounted) return;
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        // --- 3. Success ---
+        log('Registration successful: ${responseData['message']}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ')),
+        );
+        Navigator.pop(context); // กลับไปหน้า Login
+      } else {
+        // --- 4. Failure ---
+        final errorMessage =
+            responseData['message'] ?? 'เกิดข้อผิดพลาดในการสมัคร';
+        log('Registration failed: $errorMessage');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      }
+    } catch (e) {
+      log('An error occurred during registration: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }
