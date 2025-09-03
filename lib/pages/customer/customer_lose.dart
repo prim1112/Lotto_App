@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/customer/customer_bill.dart';
-import 'package:lotto_application/pages/profile/profile.dart';
 
 class LosePage extends StatefulWidget {
   const LosePage({super.key});
@@ -12,41 +11,9 @@ class LosePage extends StatefulWidget {
 class _LosePageState extends State<LosePage> {
   @override
   Widget build(BuildContext context) {
-    final screensize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Color(0xFFE1F5FE),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFE1F5FE),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-                child: SizedBox(
-                  width: 140,
-                  child: Image.asset(
-                    'assets/images/Screenshot (1724).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: TextButton(
-                  onPressed: () => Edit(context),
-                  child: Image.asset(
-                    'assets/images/5.png',
-                    fit: BoxFit.contain,
-                    width: 50,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      appBar: AppBar(backgroundColor: Color(0xFFE1F5FE)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -68,7 +35,7 @@ class _LosePageState extends State<LosePage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
-                          'assets/images/lose.jpg',
+                          'assets/images/Sadness.png',
                           width: 340,
                           fit: BoxFit.cover,
                         ),
@@ -124,13 +91,6 @@ class _LosePageState extends State<LosePage> {
           ),
         ),
       ),
-    );
-  }
-
-  void Edit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ProfilePage()),
     );
   }
 }

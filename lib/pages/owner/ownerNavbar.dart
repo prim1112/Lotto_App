@@ -21,7 +21,7 @@ class CustomNavigationBar extends StatelessWidget {
         height: 60,
         indicatorColor: const Color(0xFF1A237E),
         indicatorShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // ปรับเลขให้กลมพอดี
+          borderRadius: BorderRadius.circular(30),
         ),
         labelTextStyle: WidgetStateProperty.all(
           TextStyle(
@@ -50,14 +50,14 @@ class CustomNavigationBar extends StatelessWidget {
           NavigationDestination(
             icon: Image(
               image: const AssetImage("assets/images/random.png"),
-              width: 25, // ลดขนาดไอคอน
+              width: 25,
             ),
             label: 'สุ่ม',
           ),
           NavigationDestination(
             icon: Image(
               image: const AssetImage("assets/images/home.png"),
-              width: 20, // ลดขนาดไอคอน
+              width: 20,
             ),
             label: 'หน้าหลัก',
           ),

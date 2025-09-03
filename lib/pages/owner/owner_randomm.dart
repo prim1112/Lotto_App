@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/owner/Owner_reset.dart';
 import 'package:lotto_application/pages/owner/ownerNavbar.dart';
@@ -16,7 +14,6 @@ class _RandomPageState extends State<RandomPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screensize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xFFE1F5FE),
       appBar: AppBar(
@@ -69,7 +66,7 @@ class _RandomPageState extends State<RandomPage> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: SizedBox(
                   width: 340,
-                  height: 380,
+                  height: 400,
                   child: Card(
                     color: Colors.white,
                     elevation: 5,
@@ -211,47 +208,146 @@ class _RandomPageState extends State<RandomPage> {
                               ),
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  style: FilledButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    backgroundColor: const Color(0xFFFFF59D),
-                                    minimumSize: const Size(90, 25),
-                                  ),
-                                  onPressed: () {
-                                    log('all');
-                                  },
-                                  child: const Text(
-                                    'ลอตโตที่ขายไปแล้ว',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'ยืนยันการสุ่ม',
+                                          style: TextStyle(
+                                            color: Color(0xFFFF0000),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          'ลอตโต้ที่ขายไปแล้ว',
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFFFFEB85,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ย้อนกลับ"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFF85FF96,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ยืนยัน"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  backgroundColor: const Color(0xFFFFF59D),
+                                  minimumSize: const Size(100, 40),
                                 ),
-                                ElevatedButton(
-                                  style: FilledButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    backgroundColor: const Color(0xFFFFF59D),
-                                    minimumSize: const Size(90, 25),
-                                  ),
-                                  onPressed: () {
-                                    log('all');
-                                  },
-                                  child: const Text(
-                                    'ลอตโตทั้งหมด',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                child: const Text('ลอตโต้ที่ขายไปแล้ว'),
+                              ),
+
+                              const SizedBox(width: 10),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'ยืนยันการสุ่ม',
+                                          style: TextStyle(
+                                            color: Color(0xFFFF0000),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          'ลอตโต้ที่ขายไปแล้ว',
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFFFFEB85,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ย้อนกลับ"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFF85FF96,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ยืนยัน"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  backgroundColor: const Color(0xFFFFF59D),
+                                  minimumSize: const Size(100, 40),
                                 ),
-                              ],
-                            ),
+                                child: const Text('ลอตโต้ทั้งหมด'),
+                              ),
+                            ],
                           ),
                         ],
                       ),

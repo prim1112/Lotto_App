@@ -1,7 +1,6 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
-import 'package:lotto_application/pages/profile/profile.dart';
+import 'package:lotto_application/pages/customer/myappbar.dart';
 
 class ShoppingPage extends StatefulWidget {
   const ShoppingPage({super.key});
@@ -14,66 +13,63 @@ class _ShoppingPage extends State<ShoppingPage> {
   Widgetbar widgetbar = Widgetbar();
   @override
   Widget build(BuildContext context) {
-    Widget currenWidget = Container();
     return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFE1F5FE),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-                child: SizedBox(
-                  width: 140,
-                  child: Image.asset(
-                    'assets/images/Screenshot (1724).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: TextButton(
-                  onPressed: () => Edit(context),
-                  child: Image.asset(
-                    'assets/images/5.png',
-                    fit: BoxFit.contain,
-                    width: 50,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      backgroundColor: const Color(0xFFB6DFF0),
+      appBar: MyAppbar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Card(
-                elevation: 4, // เพิ่มเงาให้กับ Card
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10), // โค้งมุมของ Card
-                ),
-                margin: const EdgeInsets.all(8.0), // ขนาดของ margin
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 60,
-                            height: 75,
-                            child: Image.asset(
-                              'assets/images/Screenshot (1726).png',
-                              fit: BoxFit.cover,
+                    Expanded(
+                      child: SizedBox(
+                        height: 35,
+                        width: 40,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'กรุณาใส่เลขสลากของคุณ',
+                            hintStyle: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
+                            prefixIcon: const Padding(
+                              padding: EdgeInsets.only(left: 10, right: 5),
+                              child: Icon(Icons.search, color: Colors.black),
+                            ),
+                            prefixIconConstraints: BoxConstraints(
+                              minWidth: 40,
+                              minHeight: 40,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                              borderSide: BorderSide.none,
                             ),
                           ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(width: 60, height: 75),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -82,25 +78,25 @@ class _ShoppingPage extends State<ShoppingPage> {
                                 const Text(
                                   'สลากกินแบ่ง',
                                   style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                     color: Color(0xFF1A237E),
                                   ),
                                 ),
                                 Row(
-                                  children: [
+                                  children: const [
                                     Text(
                                       'งวดวันที่ ',
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 14,
                                         color: Color(0xFF1A237E),
                                       ),
                                     ),
                                     Text(
                                       '1 สิงหาคม 2567',
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 15,
                                         color: Colors.black,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
@@ -110,7 +106,7 @@ class _ShoppingPage extends State<ShoppingPage> {
                                   width: double.infinity,
                                   height: 35,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFFF59D),
+                                    color: Color(0xFFFFF59D),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   alignment: Alignment.center,
@@ -128,68 +124,70 @@ class _ShoppingPage extends State<ShoppingPage> {
                           ),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 5.0,
-                      ),
-                      child: Row(
+                      const SizedBox(height: 10),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 '100',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 255, 186, 186),
+                                  color: Color(0xffFF8FB8),
                                 ),
                               ),
-                              SizedBox(height: 5),
-                              Text(
-                                'บาท',
-                                style: TextStyle(
-                                  fontSize: 8,
-                                  color: Colors.black,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'บาท',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              // Functionality for the basket button
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    54,
-                                    197,
-                                    244,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Functionality for the basket button
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        54,
+                                        197,
+                                        244,
+                                      ),
+                                      width: 3,
+                                    ),
                                   ),
-                                  width: 3,
+                                  padding: const EdgeInsets.all(4),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 20,
+                                    child: Image.asset(
+                                      'assets/images/basket.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              padding: const EdgeInsets.all(4),
-                              child: SizedBox(
-                                width: 30,
-                                height: 20,
-                                child: Image.asset(
-                                  'assets/images/basket.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -197,13 +195,6 @@ class _ShoppingPage extends State<ShoppingPage> {
         ),
       ),
       bottomNavigationBar: widgetbar,
-    );
-  }
-
-  void Edit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ProfilePage()),
     );
   }
 }

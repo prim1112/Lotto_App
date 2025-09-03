@@ -68,6 +68,5 @@ class _WidgetbarState extends State<Widgetbar> {
         });
       },
     );
-    ;
   }
 }

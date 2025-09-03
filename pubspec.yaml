@@ -62,7 +62,9 @@ flutter:
     - assets/images/home.png
     - assets/images/profile.png
     - assets/images/proflie1.png
-    - assets/images/images.jpg
+    - assets/images/basket.png
+    - assets/images/Sadness.png
+    - assets/images/Joy.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

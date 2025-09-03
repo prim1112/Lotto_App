@@ -14,18 +14,11 @@ class _OdrawPageState extends State<OdrawPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screensize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFE1F5FE),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: const Text(
           'รางวัลที่ออก',
           style: TextStyle(
@@ -54,9 +47,9 @@ class _OdrawPageState extends State<OdrawPage> {
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
                     child: Text(
@@ -70,10 +63,10 @@ class _OdrawPageState extends State<OdrawPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: SizedBox(
                   width: 340,
-                  height: 380,
+                  height: 400,
                   child: Card(
                     color: Colors.white,
                     elevation: 5,
@@ -84,9 +77,9 @@ class _OdrawPageState extends State<OdrawPage> {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text(
                                 'รางวัลที่ 1',
                                 style: TextStyle(fontSize: 12),
@@ -105,15 +98,15 @@ class _OdrawPageState extends State<OdrawPage> {
                               ),
                             ],
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: EdgeInsets.all(20.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                    children: [
                                       Column(
                                         children: [
                                           Text(
@@ -160,15 +153,15 @@ class _OdrawPageState extends State<OdrawPage> {
                               ),
                             ],
                           ),
-                          Row(
+                          const Row(
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: EdgeInsets.all(20.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                    children: [
                                       Column(
                                         children: [
                                           Text(
@@ -215,6 +208,7 @@ class _OdrawPageState extends State<OdrawPage> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/owner/Owner_reset.dart';
+import 'package:lotto_application/pages/login.dart';
 
 class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -13,23 +13,31 @@ class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFFE1F5FE),
+      backgroundColor: const Color(0xFFB6DFF0),
       actions: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-          child: TextButton(
-            onPressed: () => Edit(context),
-            child: Image.asset('assets/images/profile.png', width: 30),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: IconButton(
+                onPressed: () => logout(context),
+                icon: const Icon(Icons.logout),
+                iconSize: 30,
+                color: Colors.black, // หรือเปลี่ยนเป็นสีอื่นที่ต้องการ
+                tooltip: 'ออกจากระบบ',
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  void Edit(BuildContext context) {
+  void logout(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditPage()),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/profile/profile.dart';
 
 class WinPage extends StatefulWidget {
   const WinPage({super.key});
@@ -11,41 +10,9 @@ class WinPage extends StatefulWidget {
 class _WinPageState extends State<WinPage> {
   @override
   Widget build(BuildContext context) {
-    final screensize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Color(0xFFE1F5FE),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFE1F5FE),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-                child: SizedBox(
-                  width: 140,
-                  child: Image.asset(
-                    'assets/images/Screenshot (1724).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                child: TextButton(
-                  onPressed: () => Edit(context),
-                  child: Image.asset(
-                    'assets/images/5.png',
-                    fit: BoxFit.contain,
-                    width: 50,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+      appBar: AppBar(backgroundColor: Color(0xFFE1F5FE)),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -66,7 +33,7 @@ class _WinPageState extends State<WinPage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
-                          'assets/images/happy.jpg',
+                          'assets/images/Joy.png',
                           width: 350,
                           fit: BoxFit.cover,
                         ),
@@ -214,7 +181,7 @@ class _WinPageState extends State<WinPage> {
                                               style: TextButton.styleFrom(
                                                 foregroundColor: Colors.black,
                                                 backgroundColor: Color(
-                                                  0xFFFFF59D,
+                                                  0xFFFFEB85,
                                                 ),
                                                 minimumSize: Size(100, 40),
                                               ),
@@ -227,7 +194,7 @@ class _WinPageState extends State<WinPage> {
                                               style: TextButton.styleFrom(
                                                 foregroundColor: Colors.black,
                                                 backgroundColor: Color(
-                                                  0xFF00E676,
+                                                  0xFF85FF96,
                                                 ),
                                                 minimumSize: Size(100, 40),
                                               ),
@@ -264,13 +231,6 @@ class _WinPageState extends State<WinPage> {
           ),
         ),
       ),
-    );
-  }
-
-  void Edit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ProfilePage()),
     );
   }
 }

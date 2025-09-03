@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
-import 'dart:convert';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/owner/Owner_draw.dart';
 import 'package:lotto_application/pages/owner/Owner_randomm.dart';
@@ -16,7 +14,6 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   int _selectedIndex = 1;
   String url = '';
-  @override
   void _onDestinationSelected(int index) {
     setState(() {
       _selectedIndex = index;

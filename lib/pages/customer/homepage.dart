@@ -1,11 +1,10 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/customer_bill.dart';
-import 'package:lotto_application/pages/profile/profile.dart';
+import 'package:lotto_application/pages/customer/myappbar.dart';
 
 class Homepage extends StatefulWidget {
-  int customer_id = 0;
+  const Homepage({super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -15,58 +14,13 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     Widgetbar widgetbar = Widgetbar();
-    Widget currenWidget = Container();
-    final screensize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE),
-      appBar: AppBar(
-        backgroundColor: Color(0xff71B1F2),
-        title: Text(
-          'เข้าสู่ระบบ',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Homepage()),
-            );
-          },
-        ),
-      ),
+      backgroundColor: const Color(0xFFB6DFF0),
+      appBar: MyAppbar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 40,
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
-                        controller: null,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -262,164 +216,10 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Container(
-                width: 320,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: SizedBox(
-                              width: 60,
-                              height: 75,
-                              child: Image.asset(
-                                'assets/images/Screenshot (1726).png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'สลากกินแบ่ง',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1A237E),
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: const TextSpan(
-                                      text: 'งวดวันที่ ',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Color(0xFF1A237E),
-                                      ),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: '1 สิงหาคม 2567',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Container(
-                                    width: 150,
-                                    height: 35,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF59D),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: const Text(
-                                      '111111',
-                                      style: TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5.0,
-                        horizontal: 8.0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '100',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromARGB(255, 255, 186, 186),
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'บาท',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color.fromARGB(
-                                    255,
-                                    54,
-                                    197,
-                                    244,
-                                  ),
-                                  width: 3,
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(4),
-                              child: SizedBox(
-                                width: 30,
-                                height: 20,
-                                child: Image.asset(
-                                  'assets/images/basket.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),
       bottomNavigationBar: widgetbar,
-    );
-  }
-
-  void Edit(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ProfilePage()),
     );
   }
 }

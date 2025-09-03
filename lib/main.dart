@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/customer/customer_top-up.dart';
-import 'package:lotto_application/pages/customer/homepage.dart';
-import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/owner/Owner_draw.dart';
 
 void main() {
@@ -19,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginPage(),
+      home: OdrawPage(),
     );
   }
 }
