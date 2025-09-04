@@ -4,10 +4,10 @@ import 'dart:convert';
 String loginRequestToJson(LoginRequest data) => json.encode(data.toJson());
 
 class LoginRequest {
-  String username;
+  String email;
   String password;
 
-  LoginRequest({required this.username, required this.password});
+  LoginRequest({required this.email, required this.password});
 
-  Map<String, dynamic> toJson() => {"username": username, "password": password};
+  Map<String, dynamic> toJson() => {"email": email, "password": password};
 }

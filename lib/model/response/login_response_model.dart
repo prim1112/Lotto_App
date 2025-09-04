@@ -20,12 +20,14 @@ class User {
   String username;
   String walletBalance;
   String role;
+  String email;
 
   User({
     required this.userId,
     required this.username,
     required this.walletBalance,
     required this.role,
+    required this.email,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -33,5 +35,6 @@ class User {
     username: json["username"],
     walletBalance: json["wallet_balance"],
     role: json["role"],
+    email: json["email"],
   );
 }
