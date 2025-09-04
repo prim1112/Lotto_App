@@ -1,6 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:lotto_application/pages/customer/homepage.dart';
+import 'dart:convert';
 import 'package:lotto_application/pages/register.dart';
+import 'package:lotto_application/pages/owner/Owner_draw.dart';
+import 'package:lotto_application/model/request/login_request_model.dart';
+import 'package:lotto_application/model/response/login_response_model.dart';
+import 'package:lotto_application/config/api_endpoints.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,62 +17,56 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var url = '';
-  TextEditingController username = TextEditingController();
+  // NOTE: Removed unused 'username' and 'url' variables for clarity
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  @override
+  // NOTE: Removed duplicate @override annotation
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE1F5FE),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight:
-                      MediaQuery.of(context).size.height *
-                      0.8, // Limit height to 80% of screen height
-                ),
-                child: Container(
-                  width: 280,
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.black, width: 1),
+      // CHANGED: Simplified the widget tree for robust centering
+      body: SafeArea(
+        child: Center(
+          // 1. Center widget to place its child in the middle of the screen
+          child: SingleChildScrollView(
+            // 2. SingleChildScrollView to allow scrolling when keyboard appears
+            child: Container(
+              width: 280,
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                // border: Border.all(color: Colors.black, width: 1), // Removed border to match design
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    'เข้าสู่ระบบ',
+                    style: TextStyle(
+                      fontSize: 24, // Increased font size for title
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SizedBox(height: 20),
-                      buildTextField(
-                        'ชื่อผู้ใช้',
-                        'กรอกชื่อผู้ใช้',
-                        controller: username,
-                      ),
-                      const SizedBox(height: 13),
-                      buildTextField(
-                        'Email',
-                        'กรอกชื่ออีเมล',
-                        controller: email,
-                      ),
-                      const SizedBox(height: 13),
-                      buildTextField(
-                        'รหัสผ่าน',
-                        'กรอกรหัสผ่าน',
-                        controller: password,
-                        obscureText: true,
-                      ),
-                      const SizedBox(height: 30),
-                      buildButtonRow(context),
-                    ],
+                  const SizedBox(height: 20), // Adjusted spacing
+                  buildTextField(
+                    'ชื่อผู้ใช้', // Changed to Thai to match screenshot
+                    'กรอกชื่อผู้ใช้',
+                    controller: email,
                   ),
-                ),
+                  const SizedBox(height: 25),
+                  buildTextField(
+                    'รหัสผ่าน',
+                    'กรอกรหัสผ่าน',
+                    controller: password,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 30),
+                  buildButtonRow(context),
+                ],
               ),
             ),
           ),
@@ -80,60 +81,53 @@ class _LoginPageState extends State<LoginPage> {
     bool obscureText = false,
     required TextEditingController controller,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: TextField(
-              obscureText: obscureText,
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: hint,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 10.0,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-              ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          obscureText: obscureText,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hint,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+              vertical: 10.0,
             ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget buildButtonRow(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment
+          .spaceBetween, // Use spaceBetween for better alignment
       children: [
         TextButton(
-          onPressed: register,
+          onPressed: _register,
           child: const Text(
             'สมัครสมาชิก',
             style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 0, 0, 0)),
           ),
         ),
-        const SizedBox(width: 8),
+        // NOTE: No need for SizedBox here if using spaceBetween
         buildButton(
           context,
           'เข้าสู่ระบบ',
           const Color(0xFFFFF59D),
           Colors.black,
-          LoginPage, // ส่งฟังก์ชัน LoginPage เข้าไปตรงนี้
+          _login, // CHANGED: Now calls the correct _login function
         ),
       ],
     );
@@ -147,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
     VoidCallback onPressed,
   ) {
     return SizedBox(
-      width: 100,
+      width: 120, // Increased width for better text fit
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -156,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: bgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: Colors.black, width: 1),
+            // side: const BorderSide(color: Colors.black, width: 1),
           ),
         ),
         child: Text(
@@ -167,9 +161,65 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void LoginPage() {}
+  // CHANGED: This is the function for the login button
+  void _login() async {
+    try {
+      // 1. Create a request model instance
+      final requestModel = LoginRequest(
+        username: email.text.trim(),
+        password: password.text.trim(),
+      );
 
-  void register() {
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.login),
+        headers: {'Content-Type': 'application/json'},
+        // 2. Use the generated function to convert the model to a JSON string
+        body: loginRequestToJson(requestModel),
+      );
+
+      if (response.statusCode == 200) {
+        // --- Login Successful ---
+        // 3. Use the generated function to parse the response string into a model
+        final loginResponse = loginResponseFromJson(response.body);
+        final String userRole =
+            loginResponse.user.role; // 4. Access data safely
+
+        log(
+          'Login successful for user: ${loginResponse.user.username}, role: $userRole',
+        );
+
+        if (userRole == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const OdrawPage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Homepage()),
+          );
+        }
+      } else {
+        // --- Login Failed ---
+        final responseData = jsonDecode(response.body);
+        final String errorMessage =
+            responseData['message'] ?? 'An unknown error occurred.';
+        log('Login failed: $errorMessage');
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
+      }
+    } catch (e) {
+      // --- Network or other exceptions ---
+      log('An error occurred during login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not connect to the server.')),
+      );
+    }
+  }
+
+  // CHANGED: Renamed function to follow convention
+  void _register() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const RegisterPage()),
