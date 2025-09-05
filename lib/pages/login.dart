@@ -53,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20), // Adjusted spacing
                   buildTextField(
-                    'ชื่อผู้ใช้', // Changed to Thai to match screenshot
-                    'กรอกชื่อผู้ใช้',
+                    'อีเมล', // Changed to Thai to match screenshot
+                    'กรอกอีเมล',
                     controller: email,
                   ),
                   const SizedBox(height: 25),
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // 1. Create a request model instance
       final requestModel = LoginRequest(
-        username: email.text.trim(),
+        email: email.text.trim(),
         password: password.text.trim(),
       );
 

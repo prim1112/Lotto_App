@@ -61,6 +61,8 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 12), // ลดระยะห่าง
           buildTextField('ชื่อผู้ใช้', 'กรอกชื่อผู้ใช้', controller: username),
           const SizedBox(height: 12),
+          buildTextField('อีเมล', 'กรอกอีเมล', controller: email),
+          const SizedBox(height: 12),
           buildTextField(
             'รหัสผ่าน',
             'กรอกรหัสผ่าน',
@@ -190,8 +192,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // ฟังก์ชันสำหรับจัดการการลงทะเบียน
   void _register() async {
+    log('Username: "${username.text}"');
+    log('Email: "${email.text}"');
+    log('Password: "${password.text}"');
+    log('Confirm Password: "${confirmpassword.text}"');
+    log('Amount: "${amount.text}"');
     // --- 1. Input Validation ---
     if (username.text.isEmpty ||
+        email.text.isEmpty ||
         password.text.isEmpty ||
         confirmpassword.text.isEmpty ||
         amount.text.isEmpty) {
@@ -227,8 +235,9 @@ class _RegisterPageState extends State<RegisterPage> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'username': username.text.trim(),
+          'email': email.text.trim(),
           'password': password.text.trim(),
-          'amount': depositAmount,
+          'wallet_balance': depositAmount,
         }),
       );
 
