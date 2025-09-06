@@ -14,6 +14,7 @@ class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: const Color(0xFFB6DFF0),
+      automaticallyImplyLeading: false,
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/pages/owner/Owner_draw.dart';
 import 'package:lotto_application/pages/owner/Owner_randomm.dart';
-import 'package:lotto_application/pages/owner/ownerNavbar.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -14,41 +13,20 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   int _selectedIndex = 1;
   String url = '';
-  void _onDestinationSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    // การสลับหน้าเมื่อกดที่แถบนำทาง
-    switch (index) {
-      case 0:
-        navigateRandomPage(context);
-        break;
-      case 1:
-        navigateOdrawPage(context);
-        break;
-    }
-  }
-
-  void navigateRandomPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RandomPage()),
-    );
-  }
-
-  void navigateOdrawPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const OdrawPage()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: const Color(0xFFE1F5FE),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios), // ไอคอนลูกศรย้อนกลับ
+          onPressed: () {
+            Navigator.pop(context); // กลับไปยังหน้าจอก่อนหน้า
+          },
+        ),
+        backgroundColor: const Color(0xFFE1F5FE),
+      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -246,11 +224,6 @@ class _EditPageState extends State<EditPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onDestinationSelected,
-        screenSize: screenSize,
       ),
     );
   }
