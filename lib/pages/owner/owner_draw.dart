@@ -42,160 +42,143 @@ class _OdrawPageState extends State<OdrawPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 50, 0, 30),
-              child: SizedBox(
-                width: 340,
-                height: 400,
-                child: Card(
-                  color: Colors.white,
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('รางวัลที่ 1', style: TextStyle(fontSize: 12)),
-                            Text(
-                              '999999',
-                              style: TextStyle(
-                                color: Color(0xFF1A237E),
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              width: 340,
+              height: 400,
+              child: Card(
+                color: Colors.white,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // รางวัลที่ 1
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('รางวัลที่ 1', style: TextStyle(fontSize: 12)),
+                          Text(
+                            '999999',
+                            style: TextStyle(
+                              color: Color(0xFF1A237E),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'รางวัล 10,000,000 บาท',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      // รางวัลที่ 2 และ 3
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'รางวัลที่ 2',
+                                style: TextStyle(fontSize: 12),
                               ),
-                            ),
-                            Text(
-                              'รางวัล 10,000,000 บาท',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        const Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'รางวัลที่ 2',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          '888888',
-                                          style: TextStyle(
-                                            color: Color(0xFF1A237E),
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'รางวัล 5,000,000 บาท',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'รางวัลที่ 3',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          '777777',
-                                          style: TextStyle(
-                                            color: Color(0xFF1A237E),
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'รางวัล 1,000,000 บาท',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                              Text(
+                                '888888',
+                                style: TextStyle(
+                                  color: Color(0xFF1A237E),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'รางวัลเลขท้าย 3 ตัว',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          '888',
-                                          style: TextStyle(
-                                            color: Color(0xFF1A237E),
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'รางวัล 500,000 บาท',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'รางวัลเลขท้าย 2 ตัว',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          '55',
-                                          style: TextStyle(
-                                            color: Color(0xFF1A237E),
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          'รางวัล 100,000 บาท',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                              Text(
+                                'รางวัล 5,000,000 บาท',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                'รางวัลที่ 3',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '777777',
+                                style: TextStyle(
+                                  color: Color(0xFF1A237E),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
+                              Text(
+                                'รางวัล 1,000,000 บาท',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      // รางวัลเลขท้าย
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'รางวัลเลขท้าย 3 ตัว',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '888',
+                                style: TextStyle(
+                                  color: Color(0xFF1A237E),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'รางวัล 500,000 บาท',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                'รางวัลเลขท้าย 2 ตัว',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                '55',
+                                style: TextStyle(
+                                  color: Color(0xFF1A237E),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'รางวัล 100,000 บาท',
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: CustomNavigationBar(

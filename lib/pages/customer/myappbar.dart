@@ -15,28 +15,31 @@ class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: const Color(0xFFB6DFF0),
       automaticallyImplyLeading: false,
+      title: const Text(
+        'User 1',
+        style: TextStyle(
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+      ),
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: IconButton(
-                onPressed: () => logout(context),
-                icon: const Icon(Icons.logout),
-                iconSize: 30,
-                color: Colors.black, // หรือเปลี่ยนเป็นสีอื่นที่ต้องการ
-                tooltip: 'ออกจากระบบ',
-              ),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+          child: IconButton(
+            onPressed: () => logout(context),
+            icon: const Icon(Icons.logout),
+            iconSize: 30,
+            color: Colors.black,
+            tooltip: 'ออกจากระบบ',
+          ),
         ),
       ],
     );
   }
 
   void logout(BuildContext context) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
     );
