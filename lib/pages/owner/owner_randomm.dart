@@ -279,9 +279,7 @@ class _RandomPageState extends State<RandomPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        content: const Text(
-                                          'ลอตโต้ที่ขายไปแล้ว',
-                                        ),
+                                        content: const Text('ลอตโต้ทั้งหมด'),
                                         actions: [
                                           Row(
                                             mainAxisAlignment:
