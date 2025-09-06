@@ -150,7 +150,7 @@ class _OdrawPageState extends State<OdrawPage> {
                                       Column(
                                         children: [
                                           Text(
-                                            'รางวัลที่เลขท้าย 3 ตัว',
+                                            'รางวัลเลขท้าย 3 ตัว',
                                             style: TextStyle(fontSize: 12),
                                           ),
                                           Text(
