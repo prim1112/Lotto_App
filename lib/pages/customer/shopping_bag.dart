@@ -82,25 +82,7 @@ class _ShoppingPage extends State<ShoppingPage> {
                                     color: Color(0xFF1A237E),
                                   ),
                                 ),
-                                Row(
-                                  children: const [
-                                    Text(
-                                      'งวดวันที่ ',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Color(0xFF1A237E),
-                                      ),
-                                    ),
-                                    Text(
-                                      '1 สิงหาคม 2567',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
                                 const SizedBox(height: 8),
                                 Container(
                                   width: double.infinity,
@@ -112,6 +94,228 @@ class _ShoppingPage extends State<ShoppingPage> {
                                   alignment: Alignment.center,
                                   child: const Text(
                                     '111111',
+                                    style: TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '100',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xffFF8FB8),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'บาท',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Functionality for the basket button
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        54,
+                                        197,
+                                        244,
+                                      ),
+                                      width: 3,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 20,
+                                    child: Image.asset(
+                                      'assets/images/basket.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(width: 60, height: 75),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'สลากกินแบ่ง',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xFF1A237E),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: double.infinity,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFFFF59D),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    '222222',
+                                    style: TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '100',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xffFF8FB8),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'บาท',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Functionality for the basket button
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        54,
+                                        197,
+                                        244,
+                                      ),
+                                      width: 3,
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(4),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 20,
+                                    child: Image.asset(
+                                      'assets/images/basket.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(width: 60, height: 75),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'สลากกินแบ่ง',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xFF1A237E),
+                                  ),
+                                ),
+
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: double.infinity,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFFFF59D),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    '333333',
                                     style: TextStyle(
                                       fontSize: 26,
                                       fontWeight: FontWeight.bold,

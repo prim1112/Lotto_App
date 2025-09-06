@@ -21,18 +21,6 @@ class _HomepageState extends State<Homepage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 0, bottom: 10, left: 20),
-                  child: Text(
-                    '1 สิงหาคม 2567',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.all(5),
               child: SizedBox(
@@ -135,11 +123,11 @@ class _HomepageState extends State<Homepage> {
                                     Column(
                                       children: [
                                         Text(
-                                          'รางวัลที่ 4',
+                                          'รางวัลเลขท้าย 3 ตัว',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
-                                          '666666',
+                                          '888',
                                           style: TextStyle(
                                             color: Color(0xFF1A237E),
                                             fontSize: 25,
@@ -155,11 +143,11 @@ class _HomepageState extends State<Homepage> {
                                     Column(
                                       children: [
                                         Text(
-                                          'รางวัลที่ 5',
+                                          'รางวัลเลขท้าย 2 ตัว',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
-                                          '555555',
+                                          '55',
                                           style: TextStyle(
                                             color: Color(0xFF1A237E),
                                             fontSize: 25,

@@ -47,21 +47,6 @@ class _OdrawPageState extends State<OdrawPage> {
           padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Column(
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                    child: Text(
-                      '1 สิงหาคม 2567',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                 child: SizedBox(
@@ -165,11 +150,11 @@ class _OdrawPageState extends State<OdrawPage> {
                                       Column(
                                         children: [
                                           Text(
-                                            'รางวัลที่ 4',
+                                            'รางวัลที่เลขท้าย 3 ตัว',
                                             style: TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            '666666',
+                                            '888',
                                             style: TextStyle(
                                               color: Color(0xFF1A237E),
                                               fontSize: 25,
@@ -185,11 +170,11 @@ class _OdrawPageState extends State<OdrawPage> {
                                       Column(
                                         children: [
                                           Text(
-                                            'รางวัลที่ 5',
+                                            'รางวัลเลขท้าย 2 ตัว',
                                             style: TextStyle(fontSize: 12),
                                           ),
                                           Text(
-                                            '555555',
+                                            '55',
                                             style: TextStyle(
                                               color: Color(0xFF1A237E),
                                               fontSize: 25,
