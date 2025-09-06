@@ -138,7 +138,69 @@ class _ShoppingPage extends State<ShoppingPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Functionality for the basket button
+                                  // >>> แสดง popup ตอนกดตะกร้า
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'ยืนยันการซื้อลอตเตอร์รี่เลข',
+                                          style: TextStyle(
+                                            color: Color(0xFFFF0000),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          '111111',
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFFFFEB85,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ย้อนกลับ"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  // 👉 ถ้ามีฟังก์ชันยืนยันให้เพิ่มตรงนี้
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFF85FF96,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ยืนยัน"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -249,7 +311,69 @@ class _ShoppingPage extends State<ShoppingPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Functionality for the basket button
+                                  // >>> แสดง popup ตอนกดตะกร้า
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'ยืนยันการซื้อลอตเตอร์รี่เลข',
+                                          style: TextStyle(
+                                            color: Color(0xFFFF0000),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          '222222',
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFFFFEB85,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ย้อนกลับ"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  // 👉 ถ้ามีฟังก์ชันยืนยันให้เพิ่มตรงนี้
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFF85FF96,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ยืนยัน"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -360,7 +484,69 @@ class _ShoppingPage extends State<ShoppingPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Functionality for the basket button
+                                  // >>> แสดง popup ตอนกดตะกร้า
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'ยืนยันการซื้อลอตเตอร์รี่เลข',
+                                          style: TextStyle(
+                                            color: Color(0xFFFF0000),
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          '333333',
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFFFFEB85,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ย้อนกลับ"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  // 👉 ถ้ามีฟังก์ชันยืนยันให้เพิ่มตรงนี้
+                                                },
+                                                style: TextButton.styleFrom(
+                                                  foregroundColor: Colors.black,
+                                                  backgroundColor: const Color(
+                                                    0xFF85FF96,
+                                                  ),
+                                                  minimumSize: const Size(
+                                                    100,
+                                                    40,
+                                                  ),
+                                                ),
+                                                child: const Text("ยืนยัน"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
