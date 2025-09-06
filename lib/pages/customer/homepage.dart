@@ -14,7 +14,6 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     Widgetbar widgetbar = Widgetbar();
-
     return Scaffold(
       backgroundColor: const Color(0xFFB6DFF0),
       appBar: MyAppbar(),
@@ -22,7 +21,7 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.only(left: 20, top: 100),
               child: SizedBox(
                 width: 320,
                 height: 380,
@@ -190,7 +189,7 @@ class _HomepageState extends State<Homepage> {
                               horizontal: 20,
                             ),
                             child: Text(
-                              'ตรวจฉลากฯงวดนี้ เพิ่ม',
+                              'ตรวจรางวัล',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color.fromARGB(255, 0, 0, 0),
