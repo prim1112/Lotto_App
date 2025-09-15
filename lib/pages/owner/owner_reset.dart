@@ -170,27 +170,20 @@ class _EditPageState extends State<EditPage> {
                 ),
               ],
             ),
+            SizedBox(height: 20),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(130, 0, 0, 0),
-                      child: FilledButton(
-                        onPressed: () {
-                          addLotto();
-                        },
-                        style: FilledButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: const Color(0xFFD80000),
-                          minimumSize: const Size(150, 40),
-                        ),
-                        child: const Text('เพิ่มลอตโต'),
-                      ),
-                    ),
-                  ],
+                FilledButton(
+                  onPressed: () {
+                    addLotto();
+                  },
+                  style: FilledButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: const Color(0xFFD80000),
+                    minimumSize: const Size(150, 40),
+                  ),
+                  child: const Text('เพิ่มลอตโต'),
                 ),
               ],
             ),
