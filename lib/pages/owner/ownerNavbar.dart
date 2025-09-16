@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/owner/Owner_draw.dart';
 import 'package:lotto_application/pages/owner/Owner_randomm.dart';
+import 'package:lotto_application/services/user_session.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   final int selectedIndex;
@@ -36,14 +37,25 @@ class CustomNavigationBar extends StatelessWidget {
         backgroundColor: const Color(0xFF16629F),
         selectedIndex: selectedIndex,
         onDestinationSelected: (int index) {
-          onDestinationSelected(index);
-          switch (index) {
-            case 0:
-              navigateRandomPage(context);
-              break;
-            case 1:
-              navigateOdrawPage(context);
-              break;
+          // ตรวจสอบว่า index ที่เลือกไม่ใช่หน้าปัจจุบัน
+          if (index != selectedIndex) {
+            onDestinationSelected(index);
+            // 3. แก้ไขการสลับหน้าให้ส่ง adminId ไปด้วย
+            switch (index) {
+              case 0:
+                // ใช้ push แทน pushReplacement หรือส่ง adminId ให้ชัดเจน
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RandomPage()),
+                );
+                break;
+              case 1:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OdrawPage()),
+                );
+                break;
+            }
           }
         },
         destinations: [
@@ -63,20 +75,6 @@ class CustomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void navigateRandomPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RandomPage()),
-    );
-  }
-
-  void navigateOdrawPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const OdrawPage()),
     );
   }
 }

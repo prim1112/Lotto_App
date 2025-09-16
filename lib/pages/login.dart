@@ -8,6 +8,7 @@ import 'package:lotto_application/pages/owner/Owner_draw.dart';
 import 'package:lotto_application/model/request/login_request_model.dart';
 import 'package:lotto_application/model/response/login_response_model.dart';
 import 'package:lotto_application/config/api_endpoints.dart';
+import 'package:lotto_application/services/user_session.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -178,25 +179,32 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        // --- Login Successful ---
-        // 3. Use the generated function to parse the response string into a model
         final loginResponse = loginResponseFromJson(response.body);
-        final String userRole =
-            loginResponse.user.role; // 4. Access data safely
 
+        // --- CHANGED: Store user data in the session ---
+        UserSession().currentUser =
+            loginResponse.user; // <<--- เก็บข้อมูล User ทั้งหมดไว้ในกล่อง
+
+        final String userRole = loginResponse.user.role;
         log(
           'Login successful for user: ${loginResponse.user.username}, role: $userRole',
         );
 
         if (userRole == 'admin') {
+          // --- CHANGED: No need to pass adminId anymore ---
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const OdrawPage()),
+            MaterialPageRoute(
+              builder: (context) =>
+                  const OdrawPage(), // <<--- ไม่ต้องส่ง adminId แล้ว
+            ),
           );
         } else {
+          final String username =
+              loginResponse.user.username; // ส่ง username ไปหน้า Homepage
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const Homepage()),
+            MaterialPageRoute(builder: (context) => Homepage()),
           );
         }
       } else {

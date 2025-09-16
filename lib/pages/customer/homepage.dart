@@ -4,8 +4,6 @@ import 'package:lotto_application/pages/customer/customer_bill.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
-
   @override
   State<Homepage> createState() => _HomepageState();
 }
