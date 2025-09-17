@@ -6,6 +6,7 @@ import 'package:lotto_application/model/response/login_response_model.dart';
 import 'package:lotto_application/model/response/lottoticket_response_model.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
+import 'package:lotto_application/pages/login.dart';
 import 'package:lotto_application/services/user_session.dart';
 
 class ShoppingPage extends StatefulWidget {
@@ -34,11 +35,30 @@ class _ShoppingPageState extends State<ShoppingPage> {
       backgroundColor: const Color(0xFFB6DFF0),
       // appBar: MyAppbar(),
       appBar: AppBar(
+        backgroundColor: const Color(0xFFB6DFF0),
+        automaticallyImplyLeading: false,
         title: Text(
           UserSession().currentUser != null
-              ? 'สวัสดี, ${UserSession().currentUser!.username}'
-              : 'กำลังโหลด...',
+              ? '${UserSession().currentUser!.username}'
+              : '',
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: IconButton(
+              onPressed: () => logout(context),
+              icon: const Icon(Icons.logout),
+              iconSize: 30,
+              color: Colors.black,
+              tooltip: 'ออกจากระบบ',
+            ),
+          ),
+        ],
       ),
 
       bottomNavigationBar: widgetbar,
@@ -179,9 +199,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                   child: const Text('ย้อนกลับ'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    // เพิ่มฟังก์ชันยืนยันซื้อ
+                                                  onPressed: () async {
+                                                    Navigator.of(
+                                                      context,
+                                                    ).pop(); // ปิด dialog ก่อน
+                                                    await purchaseTicket(
+                                                      lotto.ticketNumber,
+                                                    ); // เรียก API ซื้อสลาก
                                                   },
                                                   style: TextButton.styleFrom(
                                                     foregroundColor:
@@ -268,5 +292,48 @@ class _ShoppingPageState extends State<ShoppingPage> {
               ticket.ticketNumber.contains(searchController.text.trim()),
         )
         .toList();
+  }
+
+  Future<void> purchaseTicket(String ticketNumber) async {
+    if (UserSession().currentUser == null) return;
+
+    var userId = UserSession().currentUser!.userId;
+
+    try {
+      var value = await Configuration.getConfig();
+      String url = value['apiEndpoint'];
+
+      final response = await http.post(
+        Uri.parse('$url/lotto/purchase'), // ใช้ endpoint ของคุณ
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"userId": userId, "ticketNumber": ticketNumber}),
+      );
+
+      if (response.statusCode == 200) {
+        // ซื้อสำเร็จ
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('ซื้อสลากหมายเลข $ticketNumber สำเร็จ 🎉')),
+        );
+        // รีเฟรช list ใหม่
+        await loadDataAsync();
+      } else {
+        // ซื้อไม่สำเร็จ
+        final resData = json.decode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(resData['message'] ?? 'ซื้อไม่สำเร็จ')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('เกิดข้อผิดพลาด กรุณาลองใหม่')),
+      );
+    }
+  }
+
+  void logout(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 }
