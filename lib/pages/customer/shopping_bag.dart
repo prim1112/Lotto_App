@@ -229,8 +229,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                       .toList(),
                 ),
               ),
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -362,14 +361,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
               ),
             ],
           ),
-=======
+
             ),
           ],
->>>>>>> Stashed changes
-=======
+
             ),
           ],
->>>>>>> Stashed changes
+
         ),
       ),
     );
