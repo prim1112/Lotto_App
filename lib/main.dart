@@ -24,10 +24,6 @@ class MyApp extends StatelessWidget {
       ),
 
       home: OdrawPage(),
-
-      home: ShoppingPage(), //เปิดหน้า Login
-
-      home: ShoppingPage(), //เปิดหน้า Login
     );
   }
 }
