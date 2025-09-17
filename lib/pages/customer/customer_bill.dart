@@ -50,25 +50,7 @@ class _BillPage extends State<BillPage> {
                                   color: Color(0xFF1A237E),
                                 ),
                               ),
-                              Row(
-                                children: const [
-                                  Text(
-                                    'งวดวันที่ ',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xFF1A237E),
-                                    ),
-                                  ),
-                                  Text(
-                                    '1 สิงหาคม 2567',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+
                               const SizedBox(height: 8),
                               Container(
                                 width: double.infinity,
@@ -79,7 +61,7 @@ class _BillPage extends State<BillPage> {
                                 ),
                                 alignment: Alignment.center,
                                 child: const Text(
-                                  '111111',
+                                  '000000',
                                   style: TextStyle(
                                     fontSize: 26,
                                     fontWeight: FontWeight.bold,
