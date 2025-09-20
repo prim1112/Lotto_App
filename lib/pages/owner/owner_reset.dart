@@ -238,12 +238,7 @@ class _EditPageState extends State<EditPage> {
   }
 
   void generateTickets() async {
-    // 1. Get the adminId directly from the UserSession singleton.
-    // The '?.userId' is a null-aware operator. It will be null if currentUser is null.
     final adminId = UserSession().currentUser?.userId;
-
-    // 2. Add a check to ensure the adminId was found.
-    // This is important in case the user session is somehow cleared.
     if (adminId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -252,7 +247,7 @@ class _EditPageState extends State<EditPage> {
           ),
         ),
       );
-      return; // Stop the function if no adminId is found.
+      return;
     }
 
     setState(() {
