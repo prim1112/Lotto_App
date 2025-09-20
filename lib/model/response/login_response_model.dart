@@ -10,15 +10,15 @@ class LoginResponse {
   LoginResponse({required this.message, required this.user});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-    message: json["message"],
-    user: User.fromJson(json["user"]),
-  );
+        message: json["message"],
+        user: User.fromJson(json["user"]),
+      );
 }
 
 class User {
   int userId;
   String username;
-  String walletBalance;
+  double walletBalance; 
   String role;
   String email;
 
@@ -30,11 +30,12 @@ class User {
     required this.email,
   });
 
+  // factory สำหรับ JSON
   factory User.fromJson(Map<String, dynamic> json) => User(
-    userId: json["user_id"],
-    username: json["username"],
-    walletBalance: json["wallet_balance"],
-    role: json["role"],
-    email: json["email"],
-  );
+        userId: json["user_id"],
+        username: json["username"],
+        walletBalance: double.tryParse(json["wallet_balance"].toString()) ?? 0.0,
+        role: json["role"],
+        email: json["email"],
+      );
 }

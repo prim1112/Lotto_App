@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
 
@@ -11,6 +13,9 @@ class BillPage extends StatefulWidget {
 
 class _BillPage extends State<BillPage> {
   Widgetbar widgetbar = Widgetbar();
+  String myLotteryNumber = "000000"; // เลขที่มี
+  String resultMessage = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +27,7 @@ class _BillPage extends State<BillPage> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'สลากกินแบ่งทั้งหมดของคุณ',
                   style: TextStyle(fontSize: 15),
@@ -37,7 +42,7 @@ class _BillPage extends State<BillPage> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(width: 60, height: 75),
+                        const SizedBox(width: 60, height: 75),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Column(
@@ -50,7 +55,6 @@ class _BillPage extends State<BillPage> {
                                   color: Color(0xFF1A237E),
                                 ),
                               ),
-
                               const SizedBox(height: 8),
                               Container(
                                 width: double.infinity,
@@ -60,9 +64,9 @@ class _BillPage extends State<BillPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 alignment: Alignment.center,
-                                child: const Text(
-                                  '000000',
-                                  style: TextStyle(
+                                child: Text(
+                                  myLotteryNumber,
+                                  style: const TextStyle(
                                     fontSize: 26,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -80,7 +84,7 @@ class _BillPage extends State<BillPage> {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               '100',
                               style: TextStyle(
@@ -90,7 +94,7 @@ class _BillPage extends State<BillPage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Text(
                                 'บาท',
                                 style: TextStyle(
@@ -107,15 +111,15 @@ class _BillPage extends State<BillPage> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.black,
-                                backgroundColor: const Color(0xFFFFF59D),
-                                minimumSize: const Size(90, 30),
+                                backgroundColor: Color(0xFFFFF59D),
+                                minimumSize: Size(90, 30),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: checkLottery,
                               child: const Text(
-                                'ตรวจฉลาก',
+                                'ตรวจสลาก',
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -126,6 +130,17 @@ class _BillPage extends State<BillPage> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 10),
+                    // แสดงผลการตรวจ
+                    if (resultMessage.isNotEmpty)
+                      Text(
+                        resultMessage,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -135,5 +150,53 @@ class _BillPage extends State<BillPage> {
       ),
       bottomNavigationBar: widgetbar,
     );
+  }
+
+  Future<void> checkLottery() async {
+    try {
+      final response = await http.get(
+        Uri.parse("https://my-lotto-api.onrender.com/api/results/latest"),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        String prize1 = data["prize1_number"];
+        String prize2 = data["prize2_number"];
+        String prize3 = data["prize3_number"];
+        String last3 = data["last3_number"];
+        String last2 = data["last2_number"];
+
+        String message = "ไม่ถูกรางวัล";
+
+        if (myLotteryNumber == prize1) {
+          message = "🎉 ถูกรางวัลที่ 1";
+        } else if (myLotteryNumber == prize2) {
+          message = "🎉 ถูกรางวัลที่ 2";
+        } else if (myLotteryNumber == prize3) {
+          message = "🎉 ถูกรางวัลที่ 3";
+        } else if (myLotteryNumber.endsWith(last3)) {
+          message = "🎉 ถูกรางวัลเลขท้าย 3 ตัว";
+        } else if (myLotteryNumber.endsWith(last2)) {
+          message = "🎉 ถูกรางวัลเลขท้าย 2 ตัว";
+        }
+
+        setState(() {
+          resultMessage = message;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("โหลดผลรางวัลไม่สำเร็จ")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("เกิดข้อผิดพลาด: $e")),
+      );
+    }
   }
 }
