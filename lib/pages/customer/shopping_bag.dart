@@ -6,10 +6,7 @@ import 'package:lotto_application/model/response/login_response_model.dart';
 import 'package:lotto_application/model/response/lottoticket_response_model.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
-<<<<<<< Updated upstream
 import 'package:lotto_application/pages/login.dart';
-=======
->>>>>>> Stashed changes
 import 'package:lotto_application/services/user_session.dart';
 
 class ShoppingPage extends StatefulWidget {
@@ -38,7 +35,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
       backgroundColor: const Color(0xFFB6DFF0),
       // appBar: MyAppbar(),
       appBar: AppBar(
-<<<<<<< Updated upstream
         backgroundColor: const Color(0xFFB6DFF0),
         automaticallyImplyLeading: false,
         title: Text(
@@ -63,13 +59,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
             ),
           ),
         ],
-=======
+
         title: Text(
           UserSession().currentUser != null
               ? 'สวัสดี, ${UserSession().currentUser!.username}'
               : 'กำลังโหลด...',
         ),
->>>>>>> Stashed changes
+
       ),
 
       bottomNavigationBar: widgetbar,
@@ -210,7 +206,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                   child: const Text('ย้อนกลับ'),
                                                 ),
                                                 TextButton(
-<<<<<<< Updated upstream
+
                                                   onPressed: () async {
                                                     Navigator.of(
                                                       context,
@@ -218,11 +214,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                     await purchaseTicket(
                                                       lotto.ticketNumber,
                                                     ); // เรียก API ซื้อสลาก
-=======
+
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
                                                     // เพิ่มฟังก์ชันยืนยันซื้อ
->>>>>>> Stashed changes
                                                   },
                                                   style: TextButton.styleFrom(
                                                     foregroundColor:
@@ -274,7 +269,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           ],
         ),
       ),
-<<<<<<< Updated upstream
+
     );
   }
 
@@ -352,8 +347,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
-=======
->>>>>>> Stashed changes
+
     );
   }
 
