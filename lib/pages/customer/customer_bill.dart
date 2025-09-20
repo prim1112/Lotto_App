@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
+import 'package:lotto_application/pages/customer/customer_lose.dart';
+import 'package:lotto_application/pages/customer/customer_win.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
 
 class BillPage extends StatefulWidget {
@@ -153,50 +155,70 @@ class _BillPage extends State<BillPage> {
   }
 
   Future<void> checkLottery() async {
-    try {
-      final response = await http.get(
-        Uri.parse("https://my-lotto-api.onrender.com/api/results/latest"),
-      );
+  try {
+    final response = await http.get(
+      Uri.parse("https://my-lotto-api.onrender.com/api/results/latest"),
+    );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
 
-        String prize1 = data["prize1_number"];
-        String prize2 = data["prize2_number"];
-        String prize3 = data["prize3_number"];
-        String last3 = data["last3_number"];
-        String last2 = data["last2_number"];
+      String prize1 = data["prize1_number"];
+      String prize2 = data["prize2_number"];
+      String prize3 = data["prize3_number"];
+      String last3 = data["last3_number"];
+      String last2 = data["last2_number"];
 
-        String message = "ไม่ถูกรางวัล";
+      String message = "ไม่ถูกรางวัล";
+      bool isWin = false;
 
-        if (myLotteryNumber == prize1) {
-          message = "🎉 ถูกรางวัลที่ 1";
-        } else if (myLotteryNumber == prize2) {
-          message = "🎉 ถูกรางวัลที่ 2";
-        } else if (myLotteryNumber == prize3) {
-          message = "🎉 ถูกรางวัลที่ 3";
-        } else if (myLotteryNumber.endsWith(last3)) {
-          message = "🎉 ถูกรางวัลเลขท้าย 3 ตัว";
-        } else if (myLotteryNumber.endsWith(last2)) {
-          message = "🎉 ถูกรางวัลเลขท้าย 2 ตัว";
-        }
+      if (myLotteryNumber == prize1) {
+        message = "🎉 ถูกรางวัลที่ 1";
+        isWin = true;
+      } else if (myLotteryNumber == prize2) {
+        message = "🎉 ถูกรางวัลที่ 2";
+        isWin = true;
+      } else if (myLotteryNumber == prize3) {
+        message = "🎉 ถูกรางวัลที่ 3";
+        isWin = true;
+      } else if (myLotteryNumber.endsWith(last3)) {
+        message = "🎉 ถูกรางวัลเลขท้าย 3 ตัว";
+        isWin = true;
+      } else if (myLotteryNumber.endsWith(last2)) {
+        message = "🎉 ถูกรางวัลเลขท้าย 2 ตัว";
+        isWin = true;
+      }
 
-        setState(() {
-          resultMessage = message;
-        });
+      setState(() {
+        resultMessage = message;
+      });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
+      // ไปยังหน้าตามผล
+      if (isWin) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const WinPage(),
+          ),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("โหลดผลรางวัลไม่สำเร็จ")),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LosePage(),
+          ),
         );
       }
-    } catch (e) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("เกิดข้อผิดพลาด: $e")),
+        const SnackBar(content: Text("โหลดผลรางวัลไม่สำเร็จ")),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("เกิดข้อผิดพลาด: $e")),
+    );
   }
+}
+
 }
