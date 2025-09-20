@@ -10,8 +10,5 @@ class ApiEndpoints {
 
   // prim
   static const String getAllTickets = "$_baseUrl/admin/tickets";
-<<<<<<< Updated upstream
   static const String purchaseTicket = "$_baseUrl/purchase";
-=======
->>>>>>> Stashed changes
 }
