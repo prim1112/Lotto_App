@@ -17,7 +17,7 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  Widgetbar widgetbar = Widgetbar();
+  Widgetbar widgetbar = Widgetbar(selectedIndex: 0);
   List<LottoticketResponse> lottoticket = [];
   late Future<void> loadData;
   TextEditingController searchController = TextEditingController();

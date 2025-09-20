@@ -1,231 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class WinPage extends StatefulWidget {
-  const WinPage({super.key});
+class WinPage extends StatelessWidget {
+  final String ticketNumber;
+  final String prizeName;
+  final int reward;
+  final String drawDate; // เรายังรับค่านี้มา แต่ในดีไซน์ใหม่จะไม่ได้แสดง
 
-  @override
-  State<WinPage> createState() => _WinPageState();
-}
+  const WinPage({
+    super.key,
+    required this.ticketNumber,
+    required this.prizeName,
+    required this.reward,
+    required this.drawDate,
+  });
 
-class _WinPageState extends State<WinPage> {
   @override
   Widget build(BuildContext context) {
+    final currencyFormatter = NumberFormat("#,##0", "en_US");
+
     return Scaffold(
-      backgroundColor: Color(0xFFE1F5FE),
-      appBar: AppBar(backgroundColor: Color(0xFFE1F5FE)),
-      body: SingleChildScrollView(
+      // 1. เปลี่ยนสีพื้นหลังให้ตรงกับรูปภาพ
+      backgroundColor: const Color(0xFFCDEBFF),
+      appBar: AppBar(
+        // ทำให้ AppBar โปร่งใสและไม่มีเงา
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        // เพิ่มไอคอน back button ให้เป็นสีเข้มเพื่อให้มองเห็น
+        iconTheme: const IconThemeData(color: Colors.black54),
+      ),
+      body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: Center(
-            child: Container(
-              width: 340,
-              child: Card(
-                color: Colors.white,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.black, width: 1.5),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          'assets/images/Joy.png',
-                          width: 350,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              '999999',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'งวดที่ 1 สิงหาคม 2567',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              'ถูกเลขรางวัลที่ 1',
-                              style: TextStyle(
-                                color: Color(0xFF01579B),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'จำนวน 1 ใบ',
-                              style: TextStyle(
-                                color: Color(0xFF01579B),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Text('เงินรางวัล', style: TextStyle(fontSize: 12)),
-                            Text(
-                              '10,000,000',
-                              style: TextStyle(
-                                color: Color(0xFF01579B),
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text('บาท', style: TextStyle(fontSize: 12)),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                            child: FilledButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Center(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(
-                                                    8.0,
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        'คุณได้รับเงินรางวัล',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'จำนวน',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '10,000,00',
-                                                        style: TextStyle(
-                                                          color: Color(
-                                                            0xFF01579B,
-                                                          ),
-                                                          fontSize: 30,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'บาท',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'เมื่อกดยืนยันเงินรางวัลของคุณจะถูกโอนเข้า',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'วอเล็ตของคุณโดยอัตโนมัติ',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      actions: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              style: TextButton.styleFrom(
-                                                foregroundColor: Colors.black,
-                                                backgroundColor: Color(
-                                                  0xFFFFEB85,
-                                                ),
-                                                minimumSize: Size(100, 40),
-                                              ),
-                                              child: Text("ย้อนกลับ"),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: TextButton.styleFrom(
-                                                foregroundColor: Colors.black,
-                                                backgroundColor: Color(
-                                                  0xFF85FF96,
-                                                ),
-                                                minimumSize: Size(100, 40),
-                                              ),
-                                              child: Text("ยืนยัน"),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: const Color.fromARGB(
-                                  255,
-                                  0,
-                                  0,
-                                  0,
-                                ),
-                                backgroundColor: Color(0xFFFFF59D),
-                                minimumSize: Size(100, 40),
-                              ),
-                              child: Text('ขึ้นเงินรางวัล'),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                    ],
+          // 2. ปรับระยะห่างรอบ Card
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Card(
+            elevation: 8,
+            shadowColor: Colors.black.withOpacity(0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20), // ทำให้ Card มนขึ้น
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // ทำให้ Column สูงเท่าที่จำเป็น
+                children: [
+                  // 3. รูปภาพด้านบน
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    child: Image.asset(
+                      'assets/images/Joy.png', // <-- ตรวจสอบว่า path รูปภาพถูกต้อง
+                      width: double.infinity,
+                      height: 250, // กำหนดความสูงรูปภาพ
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 24),
+
+                  // 4. โครงสร้าง Text ที่ปรับแก้ใหม่ทั้งหมด
+                  Text(
+                    ticketNumber,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      letterSpacing: 2, // เพิ่มระยะห่างระหว่างตัวอักษร
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  Text(
+                    'ถูก$prizeName',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[800],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  const Text(
+                    'เงินรางวัล',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 4),
+
+                  Text(
+                    currencyFormatter.format(reward),
+                    style: const TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+
+                  const Text(
+                    'บาท',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // 5. ปุ่ม "ขึ้นเงินรางวัล"
+                  ElevatedButton(
+                    onPressed: () {
+                      // TODO: ใส่ Logic การขึ้นเงินรางวัล
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFF59D),
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
+                      elevation: 3,
+                    ),
+                    child: const Text(
+                      'ขึ้นเงินรางวัล',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
               ),
             ),
           ),

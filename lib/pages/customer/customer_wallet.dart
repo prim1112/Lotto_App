@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/model/Request/topup_request.dart';
@@ -19,7 +19,7 @@ class WalletPage extends StatefulWidget {
 
 class _WalletPageState extends State<WalletPage> {
   TextEditingController amountController = TextEditingController();
-  Widgetbar widgetbar = const Widgetbar();
+  // Widgetbar widgetbar = const Widgetbar();
   double balanceText = 0.0;
 
   User? get currentUser => UserSession().currentUser;
@@ -31,7 +31,7 @@ class _WalletPageState extends State<WalletPage> {
     // แสดงเงินจาก session ก่อน
     final user = currentUser;
     if (user != null) {
-     balanceText = user.walletBalance; 
+      balanceText = user.walletBalance;
     }
 
     // โหลดจาก API เพื่อ sync
@@ -88,7 +88,7 @@ class _WalletPageState extends State<WalletPage> {
           ),
         ),
       ),
-      bottomNavigationBar: widgetbar,
+      bottomNavigationBar: Widgetbar(selectedIndex: 0),
     );
   }
 
@@ -145,7 +145,9 @@ class _WalletPageState extends State<WalletPage> {
                         ),
                         style: const TextStyle(fontSize: 20),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,2}'),
+                          ),
                         ],
                       ),
                     ),
@@ -231,9 +233,9 @@ class _WalletPageState extends State<WalletPage> {
   Future<void> addWallet() async {
     final user = currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ไม่พบข้อมูลผู้ใช้')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ไม่พบข้อมูลผู้ใช้')));
       return;
     }
 
@@ -294,12 +296,14 @@ class _WalletPageState extends State<WalletPage> {
             errorMsg = errorResponse['message'];
           }
         } catch (_) {}
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMsg)));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     }
 
     // sync กับ DB จริง

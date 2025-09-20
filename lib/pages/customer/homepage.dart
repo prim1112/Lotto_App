@@ -11,7 +11,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
-    Widgetbar widgetbar = Widgetbar();
+    // Widgetbar widgetbar = Widgetbar();
     return Scaffold(
       backgroundColor: const Color(0xFFB6DFF0),
       appBar: MyAppbar(),
@@ -162,7 +162,7 @@ class _HomepageState extends State<Homepage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const BillPage(),
+                                    builder: (context) => const MyTicketsPage(),
                                   ),
                                 );
                               },
@@ -201,7 +201,7 @@ class _HomepageState extends State<Homepage> {
           // ชื่อผู้ใช้ที่มุมบนซ้าย (ใช้ Positioned)
         ],
       ),
-      bottomNavigationBar: widgetbar,
+      bottomNavigationBar: Widgetbar(selectedIndex: 0),
     );
   }
 }

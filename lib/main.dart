@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:lotto_application/pages/customer/homepage.dart';
-import 'package:lotto_application/pages/customer/shopping_bag.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:lotto_application/pages/login.dart';
-import 'package:lotto_application/pages/owner/Owner_draw.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('th', null);
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: LoginPage(), //เปิดหน้า Login
+      title: 'Lotto Application',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const LoginPage(), // <-- หรือหน้าที่คุณต้องการให้เป็นหน้าแรก
     );
   }
 }
