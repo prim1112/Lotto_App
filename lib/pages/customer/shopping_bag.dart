@@ -59,13 +59,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
             ),
           ),
         ],
-
-        title: Text(
-          UserSession().currentUser != null
-              ? 'สวัสดี, ${UserSession().currentUser!.username}'
-              : 'กำลังโหลด...',
-        ),
-
       ),
 
       bottomNavigationBar: widgetbar,
@@ -206,7 +199,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                   child: const Text('ย้อนกลับ'),
                                                 ),
                                                 TextButton(
-
                                                   onPressed: () async {
                                                     Navigator.of(
                                                       context,
@@ -214,11 +206,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                     await purchaseTicket(
                                                       lotto.ticketNumber,
                                                     ); // เรียก API ซื้อสลาก
-
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    // เพิ่มฟังก์ชันยืนยันซื้อ
                                                   },
+
                                                   style: TextButton.styleFrom(
                                                     foregroundColor:
                                                         Colors.black,
@@ -269,7 +258,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
           ],
         ),
       ),
-
     );
   }
 
@@ -347,41 +335,40 @@ class _ShoppingPageState extends State<ShoppingPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
-
     );
   }
 
-  Future<void> loadDataAsync() async {
-    var value = await Configuration.getConfig();
-    String url = value['apiEndpoint'];
+  // Future<void> loadDataAsync() async {
+  //   var value = await Configuration.getConfig();
+  //   String url = value['apiEndpoint'];
 
-    try {
-      final response = await http.get(Uri.parse('$url/admin/tickets'));
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        lottoticket = List<LottoticketResponse>.from(
-          jsonData.map((x) => LottoticketResponse.fromJson(x)),
-        );
-        setState(() {});
-      } else {
-        throw Exception('Failed to load tickets');
-      }
-    } catch (e) {
-      print('Error loading tickets: $e');
-      throw e;
-    }
-  }
+  //   try {
+  //     final response = await http.get(Uri.parse('$url/admin/tickets'));
+  //     if (response.statusCode == 200) {
+  //       final jsonData = json.decode(response.body);
+  //       lottoticket = List<LottoticketResponse>.from(
+  //         jsonData.map((x) => LottoticketResponse.fromJson(x)),
+  //       );
+  //       setState(() {});
+  //     } else {
+  //       throw Exception('Failed to load tickets');
+  //     }
+  //   } catch (e) {
+  //     print('Error loading tickets: $e');
+  //     throw e;
+  //   }
+  // }
 
-  List<LottoticketResponse> get filteredTickets {
-    var availableTickets = lottoticket
-        .where((ticket) => ticket.status == "available")
-        .toList();
-    if (searchController.text.isEmpty) return availableTickets;
-    return availableTickets
-        .where(
-          (ticket) =>
-              ticket.ticketNumber.contains(searchController.text.trim()),
-        )
-        .toList();
-  }
+  // List<LottoticketResponse> get filteredTickets {
+  //   var availableTickets = lottoticket
+  //       .where((ticket) => ticket.status == "available")
+  //       .toList();
+  //   if (searchController.text.isEmpty) return availableTickets;
+  //   return availableTickets
+  //       .where(
+  //         (ticket) =>
+  //             ticket.ticketNumber.contains(searchController.text.trim()),
+  //       )
+  //       .toList();
+  // }
 }
