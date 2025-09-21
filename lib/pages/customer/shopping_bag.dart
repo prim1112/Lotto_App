@@ -33,40 +33,15 @@ class _ShoppingPageState extends State<ShoppingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFB6DFF0),
-      // appBar: MyAppbar(),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFB6DFF0),
-        automaticallyImplyLeading: false,
-        title: Text(
-          UserSession().currentUser != null
-              ? '${UserSession().currentUser!.username}'
-              : '',
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: IconButton(
-              onPressed: () => logout(context),
-              icon: const Icon(Icons.logout),
-              iconSize: 30,
-              color: Colors.black,
-              tooltip: 'ออกจากระบบ',
-            ),
-          ),
-        ],
-      ),
+      
+      appBar: MyAppbar(),
 
       bottomNavigationBar: widgetbar,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Search bar
+            
             SizedBox(
               height: 40,
               child: TextField(
@@ -85,7 +60,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {}); // รีเฟรช list ตาม search
+                  setState(() {}); 
                 },
               ),
             ),
@@ -121,7 +96,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                   ),
                                   const SizedBox(height: 8),
 
-                                  // เลขสลาก
+                                  
                                   Padding(
                                     padding: const EdgeInsets.only(left: 70),
                                     child: Container(
@@ -147,7 +122,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                   ),
                                   const SizedBox(height: 12),
 
-                                  // ราคาและปุ่มตะกร้า
+                                  
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -162,7 +137,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          // popup ยืนยันซื้อสลาก
+                                          
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
@@ -202,10 +177,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                   onPressed: () async {
                                                     Navigator.of(
                                                       context,
-                                                    ).pop(); // ปิด dialog ก่อน
+                                                    ).pop(); 
                                                     await purchaseTicket(
                                                       lotto.ticketNumber,
-                                                    ); // เรียก API ซื้อสลาก
+                                                    ); 
                                                   },
 
                                                   style: TextButton.styleFrom(
@@ -305,7 +280,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
       String url = value['apiEndpoint'];
 
       final response = await http.post(
-        Uri.parse('$url/lotto/purchase'), // ใช้ endpoint ของคุณ
+        Uri.parse('$url/lotto/purchase'), 
         headers: {"Content-Type": "application/json"},
         body: json.encode({"userId": userId, "ticketNumber": ticketNumber}),
       );

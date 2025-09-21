@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lotto_application/pages/login.dart';
+import 'package:lotto_application/services/user_session.dart';
 
 class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -15,14 +16,16 @@ class MyAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: const Color(0xFFB6DFF0),
       automaticallyImplyLeading: false,
-      title: const Text(
-        'User 1',
-        style: TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
+      title:  Text(
+          UserSession().currentUser != null
+              ? '${UserSession().currentUser!.username}'
+              : '',
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
         ),
-      ),
       actions: [
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),

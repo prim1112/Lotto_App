@@ -14,4 +14,7 @@ class ApiEndpoints {
   static String getUserTickets(String userId) {
     return '$_baseUrl/users/$userId/tickets';
   }
+  static const String claim = '$_baseUrl/prizes/claim';
+  static const String resetSystem = '$_baseUrl/admin/reset-system';
+
 }
