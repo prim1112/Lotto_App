@@ -14,7 +14,7 @@ class WinPage extends StatefulWidget {
   final int reward;
   final String drawDate; // แสดงผล
   final String? drawDateIso; // สำหรับ API
-  final VoidCallback? onClaimed; // callback ให้ WalletPage อัปเดตเงิน
+  // final VoidCallback? onClaimed; // callback ให้ WalletPage อัปเดตเงิน
 
   const WinPage({
     super.key,
@@ -23,7 +23,7 @@ class WinPage extends StatefulWidget {
     required this.reward,
     required this.drawDate,
     this.drawDateIso,
-    this.onClaimed,
+    // this.onClaimed,
   });
 
   @override
@@ -32,67 +32,6 @@ class WinPage extends StatefulWidget {
 
 class _WinPageState extends State<WinPage> {
   bool _isClaiming = false;
-
-  Future<void> _claimByNumber() async {
-    if (_isClaiming) return;
-
-    final userId = UserSession().currentUser?.userId;
-    if (userId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณาเข้าสู่ระบบก่อน')),
-      );
-      return;
-    }
-
-    setState(() => _isClaiming = true);
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-
-    try {
-      final url = Uri.parse(ApiEndpoints.claim);
-      final headers = {'Content-Type': 'application/json'};
-      final body = <String, dynamic>{
-        'userId': userId,
-        'ticketNumber': widget.ticketNumber,
-        if ((widget.drawDateIso ?? '').isNotEmpty) 'drawDate': widget.drawDateIso,
-      };
-
-      if (kDebugMode) dev.log('CLAIM body => ${jsonEncode(body)}');
-
-      final res = await http.post(url, headers: headers, body: jsonEncode(body));
-
-      if (mounted) Navigator.of(context).pop(); // ปิด Loading
-
-      bool success = res.statusCode >= 200 && res.statusCode < 300;
-      String msg = success ? 'ขึ้นเงินรางวัลสำเร็จ' : 'ขึ้นเงินรางวัลล้มเหลว';
-
-      if (!success) {
-        try {
-          final jsonResp = jsonDecode(res.body);
-          msg = jsonResp['message'] ?? msg;
-        } catch (_) {}
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-
-      if (success && mounted) {
-        widget.onClaimed?.call(); // รีโหลดยอด WalletPage
-        Navigator.pop(context, true); // ปิด WinPage
-      }
-    } catch (e, st) {
-      if (mounted) Navigator.of(context).pop();
-      if (kDebugMode) dev.log('claim-error', error: e, stackTrace: st);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _isClaiming = false);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +88,10 @@ class _WinPageState extends State<WinPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text('เงินรางวัล', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                const Text(
+                  'เงินรางวัล',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
                 const SizedBox(height: 4),
                 Text(
                   currencyFormatter.format(widget.reward),
@@ -159,7 +101,10 @@ class _WinPageState extends State<WinPage> {
                     color: Colors.black87,
                   ),
                 ),
-                const Text('บาท', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                const Text(
+                  'บาท',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _isClaiming ? null : _claimByNumber,
@@ -169,12 +114,18 @@ class _WinPageState extends State<WinPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
+                    ),
                     elevation: 3,
                   ),
                   child: Text(
                     _isClaiming ? 'กำลังดำเนินการ...' : 'ขึ้นเงินรางวัล',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -184,5 +135,87 @@ class _WinPageState extends State<WinPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _claimByNumber() async {
+    if (_isClaiming) return;
+
+    final userId = UserSession().currentUser?.userId;
+    if (userId == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('กรุณาเข้าสู่ระบบก่อน')));
+      return;
+    }
+
+    setState(() => _isClaiming = true);
+
+    // แสดง Loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final url = Uri.parse(ApiEndpoints.claim);
+      final headers = {'Content-Type': 'application/json'};
+      final body = <String, dynamic>{
+        'userId': userId,
+        'ticketNumber': widget.ticketNumber,
+        if ((widget.drawDateIso ?? '').isNotEmpty)
+          'drawDate': widget.drawDateIso,
+      };
+
+      if (kDebugMode) dev.log('CLAIM body => ${jsonEncode(body)}');
+
+      final res = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      // ปิด Loading dialog ทันทีหลังได้ response
+      if (mounted) Navigator.of(context).pop();
+
+      // --- ปรับโครงสร้าง Logic ตรงนี้ ---
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        // กรณีสำเร็จ
+        final jsonResp = jsonDecode(res.body);
+        final double? newBalance = double.tryParse(
+          jsonResp['newBalance'].toString(),
+        );
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('ขึ้นเงินรางวัลสำเร็จ')));
+
+        if (mounted) {
+          // ส่งค่า newBalance กลับไปตอนปิดหน้า
+          Navigator.pop(context, newBalance);
+        }
+      } else {
+        // กรณีล้มเหลว
+        String msg = 'ขึ้นเงินรางวัลล้มเหลว';
+        try {
+          final jsonResp = jsonDecode(res.body);
+          msg = jsonResp['message'] ?? msg;
+        } catch (_) {
+          // กรณีที่ body ไม่มี json หรือ error อื่นๆ
+        }
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(msg)));
+      }
+    } catch (e, st) {
+      // ปิด Loading dialog กรณีเกิด exception
+      if (mounted) Navigator.of(context).pop();
+      if (kDebugMode) dev.log('claim-error', error: e, stackTrace: st);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
+    } finally {
+      if (mounted) setState(() => _isClaiming = false);
+    }
   }
 }

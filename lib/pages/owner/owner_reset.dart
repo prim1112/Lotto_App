@@ -29,90 +29,114 @@ class _EditPageState extends State<EditPage> {
         ),
         backgroundColor: const Color(0xFFE1F5FE),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 30),
-            SizedBox(
-              width: 90,
-              height: 90,
-              child: Image.asset('assets/images/proflie1.png'),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Admin',
-              style: TextStyle(color: Colors.white, fontSize: 35),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'ลบข้อมูลระบบทั้งหมด',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 13),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'จำลองระบบใหม่ เหลือแค่เจ้าของ',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 13),
-            ),
-            const SizedBox(height: 20),
-
-            // ปุ่ม Reset All
-            FilledButton(
-              onPressed: _isResetting ? null : _showResetDialog,
-              style: FilledButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: const Color(0xFFD80000),
-                minimumSize: const Size(150, 40),
+      // --- START: แก้ไขส่วนนี้ ---
+      body: Center(
+        // 1. ใช้ Center Widget ห่อเนื้อหาทั้งหมดเพื่อให้มาอยู่กลางจอ
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment
+                .center, // 2. จัดให้ทุกอย่างใน Column อยู่ตรงกลางแนวนอน
+            children: [
+              const SizedBox(height: 30),
+              SizedBox(
+                width: 90,
+                height: 90,
+                child: Image.asset('assets/images/proflie1.png'),
               ),
-              child: _isResetting
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
-                  : const Text('Reset All'),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              const Text(
+                'Admin',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 35,
+                ), // แก้ไขสีเพื่อให้มองเห็นชัดขึ้น
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'ลบข้อมูลระบบทั้งหมด',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'จำลองระบบใหม่ เหลือแค่เจ้าของ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 20),
 
-            // ปุ่ม Generate Tickets
-            _isLoading
-                ? const CircularProgressIndicator()
-                : FilledButton(
-                    onPressed: generateTickets,
-                    style: FilledButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: const Color.fromARGB(255, 216, 122, 0),
-                      minimumSize: const Size(150, 40),
+              // ปุ่ม Reset All
+              FilledButton(
+                onPressed: _isResetting ? null : _showResetDialog,
+                style: FilledButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color(0xFFD80000),
+                  minimumSize: const Size(150, 40),
+                ),
+                child: _isResetting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('Reset All'),
+              ),
+              const SizedBox(height: 20),
+
+              // ปุ่ม Generate Tickets
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : FilledButton(
+                      onPressed: generateTickets,
+                      style: FilledButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: const Color.fromARGB(255, 216, 122, 0),
+                        minimumSize: const Size(150, 40),
+                      ),
+                      child: const Text('เพิ่มลอตโต'),
                     ),
-                    child: const Text('เพิ่มลอตโต'),
-                  ),
-            const SizedBox(height: 50),
+              const SizedBox(height: 50),
 
-            // ปุ่ม Log Out
-            FilledButton(
-              onPressed: () {
-                UserSession().currentUser = null;
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginPage()),
-                  (route) => false,
-                );
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                side: const BorderSide(color: Colors.black, width: 4),
-                minimumSize: const Size(250, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              // ปุ่ม Log Out
+              FilledButton(
+                onPressed: () {
+                  UserSession().currentUser = null;
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                    (route) => false,
+                  );
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(color: Colors.black, width: 4),
+                  minimumSize: const Size(250, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Log Out',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-              child: const Text(
-                'Log Out',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
+              const SizedBox(height: 30), // เพิ่มระยะห่างด้านล่างเล็กน้อย
+            ],
+          ),
         ),
       ),
+      // --- END: แก้ไขส่วนนี้ ---
     );
   }
 
@@ -123,7 +147,10 @@ class _EditPageState extends State<EditPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('ยืนยันการลบข้อมูลระบบทั้งหมด', style: TextStyle(color: Colors.red)),
+        title: const Text(
+          'ยืนยันการลบข้อมูลระบบทั้งหมด',
+          style: TextStyle(color: Colors.red),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -142,7 +169,10 @@ class _EditPageState extends State<EditPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            style: TextButton.styleFrom(backgroundColor: Colors.grey, foregroundColor: Colors.white),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.grey,
+              foregroundColor: Colors.white,
+            ),
             child: const Text('ยกเลิก'),
           ),
           TextButton(
@@ -150,7 +180,10 @@ class _EditPageState extends State<EditPage> {
               Navigator.pop(context);
               _resetSystem(_adminCodeController.text.trim());
             },
-            style: TextButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
             child: const Text('ยืนยันการลบ'),
           ),
         ],
@@ -171,9 +204,9 @@ class _EditPageState extends State<EditPage> {
     }
 
     if (adminCode.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('กรุณากรอกรหัสยืนยัน')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('กรุณากรอกรหัสยืนยัน')));
       return;
     }
 
@@ -183,13 +216,19 @@ class _EditPageState extends State<EditPage> {
       final res = await http.post(
         Uri.parse(ApiEndpoints.resetSystem),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'adminUserId': user.userId, 'adminCode': adminCode, 'confirm': true}),
+        body: jsonEncode({
+          'adminUserId': user.userId,
+          'adminCode': adminCode,
+          'confirm': true,
+        }),
       );
 
       final msg = _extractMessage(res.body) ?? 'รีเซ็ตระบบสำเร็จ';
 
       if (res.statusCode >= 200 && res.statusCode < 300) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(msg)));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('ล้มเหลว: ${res.statusCode} - $msg')),
@@ -197,9 +236,9 @@ class _EditPageState extends State<EditPage> {
       }
     } catch (e) {
       log('Reset system error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้: $e')));
     } finally {
       if (mounted) setState(() => _isResetting = false);
     }
@@ -208,7 +247,8 @@ class _EditPageState extends State<EditPage> {
   String? _extractMessage(String body) {
     try {
       final j = jsonDecode(body);
-      return (j['message'] ?? j['error'] ?? j['detail'] ?? j['status'])?.toString();
+      return (j['message'] ?? j['error'] ?? j['detail'] ?? j['status'])
+          ?.toString();
     } catch (_) {
       return null;
     }
@@ -219,7 +259,11 @@ class _EditPageState extends State<EditPage> {
     final adminId = UserSession().currentUser?.userId;
     if (adminId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not find user information. Please log in again.')),
+        const SnackBar(
+          content: Text(
+            'Could not find user information. Please log in again.',
+          ),
+        ),
       );
       return;
     }
@@ -236,8 +280,11 @@ class _EditPageState extends State<EditPage> {
       if (!mounted) return;
 
       final responseData = jsonDecode(response.body);
-      final String message = responseData['message'] ?? 'An unknown error occurred.';
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      final String message =
+          responseData['message'] ?? 'An unknown error occurred.';
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } catch (e) {
       log('Generate tickets error: $e');
       if (!mounted) return;

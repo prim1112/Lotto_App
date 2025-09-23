@@ -1,4 +1,3 @@
-// wallet_page.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,7 @@ import 'package:lotto_application/model/response/login_response_model.dart';
 import 'package:lotto_application/services/user_session.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
-import 'customer_win.dart';
+import 'customer_win.dart'; // หรือ win_page.dart ตามชื่อไฟล์ของคุณ
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
@@ -71,7 +70,10 @@ class _WalletPageState extends State<WalletPage> {
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: const Color(0xFF34A7D6),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         side: const BorderSide(color: Colors.black, width: 1),
                       ),
                       child: const Text('เติมเงิน'),
@@ -84,12 +86,6 @@ class _WalletPageState extends State<WalletPage> {
                 child: Text('ยอดเงินคงเหลือ', style: TextStyle(fontSize: 16)),
               ),
               const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  onPressed: openWinPage,
-                  child: const Text('เปิดหน้า WinPage'),
-                ),
-              ),
             ],
           ),
         ),
@@ -98,9 +94,11 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
+  // --- จุดที่แก้ไข ---
   // ฟังก์ชันเปิด WinPage
   void openWinPage() async {
-    final result = await Navigator.push(
+    // ระบุว่า Navigator จะส่งค่ากลับมาเป็น double? (ตัวเลขที่อาจเป็น null ได้)
+    final result = await Navigator.push<double?>(
       context,
       MaterialPageRoute(
         builder: (_) => WinPage(
@@ -109,16 +107,21 @@ class _WalletPageState extends State<WalletPage> {
           reward: 1000000,
           drawDate: '16 ก.ย. 2568',
           drawDateIso: '2025-09-16',
-          onClaimed: () async {
-            await loadBalance(); // รีโหลดยอดเงิน
-          },
+          // onClaimed ถูกนำออกไปแล้ว เพราะไม่จำเป็นต้องใช้
         ),
       ),
     );
 
-    // ถ้าปิด WinPage โดยสำเร็จ
-    if (result == true) await loadBalance();
+    // ตรวจสอบว่ามีค่า (ยอดเงินใหม่) ส่งกลับมาหรือไม่
+    if (result != null) {
+      // นำค่า result ที่ได้มาอัปเดตหน้าจอโดยตรง
+      setState(() {
+        balanceText = result;
+        currentUser?.walletBalance = result;
+      });
+    }
   }
+  // --- สิ้นสุดจุดที่แก้ไข ---
 
   // โหลดยอดเงินจาก API
   Future<void> loadBalance() async {
@@ -126,8 +129,12 @@ class _WalletPageState extends State<WalletPage> {
     if (user == null) return;
 
     try {
-      final apiUrl = await Configuration.getConfig().then((v) => v["apiEndpoint"]);
-      final response = await http.get(Uri.parse('$apiUrl/wallet/${user.userId}'));
+      final apiUrl = await Configuration.getConfig().then(
+        (v) => v["apiEndpoint"],
+      );
+      final response = await http.get(
+        Uri.parse('$apiUrl/wallet/${user.userId}'),
+      );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final newBalance = double.tryParse(data['balance'].toString()) ?? 0.0;
@@ -147,42 +154,76 @@ class _WalletPageState extends State<WalletPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
           content: SizedBox(
             width: 300,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('จำนวนเงิน', style: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.bold)),
+                const Text(
+                  'จำนวนเงิน',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
                       child: TextField(
                         controller: amountController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 16,
+                          ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black, width: 2),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black, width: 2),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
                             borderRadius: BorderRadius.circular(50),
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
-                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,2}'),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 10),
-                    const Text('บาท', style: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'บาท',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text('ขั้นต่ำ 100 บาท', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                const Text(
+                  'ขั้นต่ำ 100 บาท',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
@@ -190,10 +231,21 @@ class _WalletPageState extends State<WalletPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF85FF96),
                       foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 12,
+                      ),
                     ),
-                    child: const Text('ยืนยัน', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      'ยืนยัน',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -210,12 +262,16 @@ class _WalletPageState extends State<WalletPage> {
 
     double amount = double.tryParse(amountController.text.trim()) ?? 0.0;
     if (amount < 100) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('ขั้นต่ำ 100 บาท')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ขั้นต่ำ 100 บาท')));
       return;
     }
 
     try {
-      final apiUrl = await Configuration.getConfig().then((v) => v["apiEndpoint"]);
+      final apiUrl = await Configuration.getConfig().then(
+        (v) => v["apiEndpoint"],
+      );
       final topupRequest = TopupRequest(userId: user.userId, amount: amount);
       final jsonData = topupRequestToJson(topupRequest);
 
@@ -234,9 +290,12 @@ class _WalletPageState extends State<WalletPage> {
         Navigator.of(context).pop(); // ปิด dialog
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     }
 
-    await loadBalance();
+    // ไม่จำเป็นต้องเรียก loadBalance() ที่นี่แล้ว ถ้า API topup คืนค่า newBalance มาให้
+    // await loadBalance();
   }
 }
