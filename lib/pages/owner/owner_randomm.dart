@@ -255,6 +255,7 @@ class _RandomPageState extends State<RandomPage> {
     );
   }
 
+  // ออกรางวัลจากที่ขายไปแล้ว
   void _showConfirmationDialog(String drawType) {
     String title = drawType == 'sold' ? 'ลอตโต้ที่ขายไปแล้ว' : 'ลอตโต้ทั้งหมด';
     showDialog(
@@ -285,6 +286,7 @@ class _RandomPageState extends State<RandomPage> {
   }
 
   Future<void> _fetchLatestResults() async {
+    //ฟังก์ดึงผลรางวัลมาแสดง
     setState(() => _isLoading = true);
     try {
       final response = await http.get(Uri.parse(ApiEndpoints.getLatestResults));

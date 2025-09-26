@@ -17,7 +17,7 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  Widgetbar widgetbar = Widgetbar();
+  Widgetbar widgetbar = Widgetbar(selectedIndex: 0);
   List<LottoticketResponse> lottoticket = [];
   late Future<void> loadData;
   TextEditingController searchController = TextEditingController();
@@ -33,40 +33,14 @@ class _ShoppingPageState extends State<ShoppingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFB6DFF0),
-      // appBar: MyAppbar(),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFB6DFF0),
-        automaticallyImplyLeading: false,
-        title: Text(
-          UserSession().currentUser != null
-              ? '${UserSession().currentUser!.username}'
-              : '',
-          style: const TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: IconButton(
-              onPressed: () => logout(context),
-              icon: const Icon(Icons.logout),
-              iconSize: 30,
-              color: Colors.black,
-              tooltip: 'ออกจากระบบ',
-            ),
-          ),
-        ],
-      ),
+
+      appBar: MyAppbar(),
 
       bottomNavigationBar: widgetbar,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Search bar
             SizedBox(
               height: 40,
               child: TextField(
@@ -85,7 +59,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {}); // รีเฟรช list ตาม search
+                  setState(() {});
                 },
               ),
             ),
@@ -121,7 +95,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                   ),
                                   const SizedBox(height: 8),
 
-                                  // เลขสลาก
                                   Padding(
                                     padding: const EdgeInsets.only(left: 70),
                                     child: Container(
@@ -147,7 +120,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                   ),
                                   const SizedBox(height: 12),
 
-                                  // ราคาและปุ่มตะกร้า
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -162,7 +134,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          // popup ยืนยันซื้อสลาก
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
@@ -200,12 +171,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () async {
-                                                    Navigator.of(
-                                                      context,
-                                                    ).pop(); // ปิด dialog ก่อน
+                                                    Navigator.of(context).pop();
                                                     await purchaseTicket(
                                                       lotto.ticketNumber,
-                                                    ); // เรียก API ซื้อสลาก
+                                                    );
                                                   },
 
                                                   style: TextButton.styleFrom(
@@ -296,35 +265,52 @@ class _ShoppingPageState extends State<ShoppingPage> {
   }
 
   Future<void> purchaseTicket(String ticketNumber) async {
-    if (UserSession().currentUser == null) return;
+    final currentUser = UserSession().currentUser;
+    if (currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณาเข้าสู่ระบบก่อนทำการซื้อ')),
+      );
+      return;
+    }
 
-    var userId = UserSession().currentUser!.userId;
+    var userId = currentUser.userId;
 
     try {
       var value = await Configuration.getConfig();
       String url = value['apiEndpoint'];
 
       final response = await http.post(
-        Uri.parse('$url/lotto/purchase'), // ใช้ endpoint ของคุณ
+        Uri.parse('$url/lotto/purchase'),
         headers: {"Content-Type": "application/json"},
         body: json.encode({"userId": userId, "ticketNumber": ticketNumber}),
       );
 
       if (response.statusCode == 200) {
-        // ซื้อสำเร็จ
+        final resData = json.decode(response.body);
+
+        final dynamic newBalanceRaw = resData['newBalance'];
+        if (newBalanceRaw != null) {
+          // --- START: แก้ไขจุดนี้ ---
+          // ใช้ double.parse() เพื่อแปลงค่าที่อาจจะเป็น String มาเป็น double
+          final double newBalance = double.parse(newBalanceRaw.toString());
+          // --- END: แก้ไขจุดนี้ ---
+
+          UserSession().currentUser?.walletBalance = newBalance;
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('ซื้อสลากหมายเลข $ticketNumber สำเร็จ 🎉')),
+          SnackBar(content: Text(resData['message'] ?? 'ซื้อสลากสำเร็จ 🎉')),
         );
-        // รีเฟรช list ใหม่
+
         await loadDataAsync();
       } else {
-        // ซื้อไม่สำเร็จ
         final resData = json.decode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(resData['message'] ?? 'ซื้อไม่สำเร็จ')),
         );
       }
     } catch (e) {
+      print('FLUTTER PURCHASE ERROR: $e'); // เราเพิ่มบรรทัดนี้ไว้ดีบัก
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('เกิดข้อผิดพลาด กรุณาลองใหม่')),
       );

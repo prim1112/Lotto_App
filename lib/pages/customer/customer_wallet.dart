@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_application/config/config.dart';
 import 'package:lotto_application/model/Request/topup_request.dart';
-import 'package:lotto_application/model/response/login_response_model.dart';
 import 'package:lotto_application/model/response/topup_response.dart';
+import 'package:lotto_application/model/response/login_response_model.dart';
+import 'package:lotto_application/services/user_session.dart';
 import 'package:lotto_application/pages/customer/WidgetBar.dart';
 import 'package:lotto_application/pages/customer/myappbar.dart';
-import 'package:lotto_application/services/user_session.dart';
+import 'customer_win.dart'; // หรือ win_page.dart ตามชื่อไฟล์ของคุณ
 
 class WalletPage extends StatefulWidget {
   const WalletPage({super.key});
@@ -19,7 +20,6 @@ class WalletPage extends StatefulWidget {
 
 class _WalletPageState extends State<WalletPage> {
   TextEditingController amountController = TextEditingController();
-  Widgetbar widgetbar = const Widgetbar();
   double balanceText = 0.0;
 
   User? get currentUser => UserSession().currentUser;
@@ -27,14 +27,9 @@ class _WalletPageState extends State<WalletPage> {
   @override
   void initState() {
     super.initState();
-
-    // แสดงเงินจาก session ก่อน
     final user = currentUser;
-    if (user != null) {
-     balanceText = user.walletBalance; 
-    }
+    if (user != null) balanceText = user.walletBalance;
 
-    // โหลดจาก API เพื่อ sync
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadBalance();
     });
@@ -52,23 +47,29 @@ class _WalletPageState extends State<WalletPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(50, 30, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '฿ ${balanceText.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        color: Color(0xFF1A237E),
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '฿ ${balanceText.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            color: Color(0xFF1A237E),
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     ElevatedButton(
                       onPressed: showTopUpDialog,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFF34A7D6),
+                        backgroundColor: const Color(0xFF34A7D6),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
@@ -84,18 +85,74 @@ class _WalletPageState extends State<WalletPage> {
                 padding: EdgeInsets.fromLTRB(50, 0, 20, 20),
                 child: Text('ยอดเงินคงเหลือ', style: TextStyle(fontSize: 16)),
               ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: widgetbar,
+      bottomNavigationBar: Widgetbar(selectedIndex: 0),
     );
   }
 
+  // --- จุดที่แก้ไข ---
+  // ฟังก์ชันเปิด WinPage
+  void openWinPage() async {
+    // ระบุว่า Navigator จะส่งค่ากลับมาเป็น double? (ตัวเลขที่อาจเป็น null ได้)
+    final result = await Navigator.push<double?>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WinPage(
+          ticketNumber: '123456',
+          prizeName: 'รางวัลที่ 1',
+          reward: 1000000,
+          drawDate: '16 ก.ย. 2568',
+          drawDateIso: '2025-09-16',
+          // onClaimed ถูกนำออกไปแล้ว เพราะไม่จำเป็นต้องใช้
+        ),
+      ),
+    );
+
+    // ตรวจสอบว่ามีค่า (ยอดเงินใหม่) ส่งกลับมาหรือไม่
+    if (result != null) {
+      // นำค่า result ที่ได้มาอัปเดตหน้าจอโดยตรง
+      setState(() {
+        balanceText = result;
+        currentUser?.walletBalance = result;
+      });
+    }
+  }
+  // --- สิ้นสุดจุดที่แก้ไข ---
+
+  // โหลดยอดเงินจาก API
+  Future<void> loadBalance() async {
+    final user = currentUser;
+    if (user == null) return;
+
+    try {
+      final apiUrl = await Configuration.getConfig().then(
+        (v) => v["apiEndpoint"],
+      );
+      final response = await http.get(
+        Uri.parse('$apiUrl/wallet/${user.userId}'),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final newBalance = double.tryParse(data['balance'].toString()) ?? 0.0;
+        setState(() {
+          balanceText = newBalance;
+          currentUser!.walletBalance = newBalance;
+        });
+      }
+    } catch (e) {
+      print('Error loading balance: $e');
+    }
+  }
+
+  // เติมเงิน
   void showTopUpDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -145,7 +202,9 @@ class _WalletPageState extends State<WalletPage> {
                         ),
                         style: const TextStyle(fontSize: 20),
                         inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d+\.?\d{0,2}'),
+                          ),
                         ],
                       ),
                     ),
@@ -168,9 +227,7 @@ class _WalletPageState extends State<WalletPage> {
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () async {
-                      await addWallet();
-                    },
+                    onPressed: addWallet,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF85FF96),
                       foregroundColor: Colors.black,
@@ -199,66 +256,22 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Future<String> loadUrl() async {
-    final value = await Configuration.getConfig();
-    return value["apiEndpoint"];
-  }
-
-  Future<void> loadBalance() async {
+  Future<void> addWallet() async {
     final user = currentUser;
     if (user == null) return;
 
-    try {
-      final apiUrl = await loadUrl();
-      final response = await http.get(
-        Uri.parse('$apiUrl/wallet/${user.userId}'),
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final newBalance = double.tryParse(data['balance'].toString()) ?? 0.0;
-
-        // update ทั้ง balanceText และ UserSession
-        setState(() {
-          balanceText = newBalance;
-          currentUser!.walletBalance = newBalance;
-        });
-      }
-    } catch (e) {
-      print('Error loading balance: $e');
-    }
-  }
-
-  Future<void> addWallet() async {
-    final user = currentUser;
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ไม่พบข้อมูลผู้ใช้')),
-      );
-      return;
-    }
-
-    double amount;
-    try {
-      final input = amountController.text.trim();
-      if (input.isEmpty) throw FormatException("Empty input");
-      amount = double.parse(
-        double.tryParse(input)?.toStringAsFixed(2) ?? '0.0',
-      );
-    } catch (e) {
-      amount = 0.0;
-    }
-
+    double amount = double.tryParse(amountController.text.trim()) ?? 0.0;
     if (amount < 100) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('จำนวนเงินต้องเป็นตัวเลขและขั้นต่ำ 100 บาท'),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('ขั้นต่ำ 100 บาท')));
       return;
     }
 
     try {
-      final apiUrl = await loadUrl();
+      final apiUrl = await Configuration.getConfig().then(
+        (v) => v["apiEndpoint"],
+      );
       final topupRequest = TopupRequest(userId: user.userId, amount: amount);
       final jsonData = topupRequestToJson(topupRequest);
 
@@ -270,39 +283,19 @@ class _WalletPageState extends State<WalletPage> {
 
       if (response.statusCode == 200) {
         final topupResponse = topupResponseFromJson(response.body);
-
-        // อัปเดต balanceText และ session
         setState(() {
           balanceText = topupResponse.newBalance;
           currentUser!.walletBalance = topupResponse.newBalance;
         });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'เติมเงินเรียบร้อย: ${topupResponse.newBalance.toStringAsFixed(2)} บาท',
-            ),
-          ),
-        );
-
-        Navigator.of(context).pop(); // ปิด Dialog
-      } else {
-        String errorMsg = 'เกิดข้อผิดพลาดในการเติมเงิน';
-        try {
-          final errorResponse = json.decode(response.body);
-          if (errorResponse['message'] != null) {
-            errorMsg = errorResponse['message'];
-          }
-        } catch (_) {}
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
+        Navigator.of(context).pop(); // ปิด dialog
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาด: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('เกิดข้อผิดพลาด: $e')));
     }
 
-    // sync กับ DB จริง
-    await loadBalance();
+    // ไม่จำเป็นต้องเรียก loadBalance() ที่นี่แล้ว ถ้า API topup คืนค่า newBalance มาให้
+    // await loadBalance();
   }
 }

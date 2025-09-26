@@ -7,7 +7,7 @@ import 'package:lotto_application/pages/customer/homepage.dart';
 import 'package:lotto_application/pages/customer/shopping_bag.dart';
 
 class Widgetbar extends StatefulWidget {
-  const Widgetbar({super.key});
+  const Widgetbar({super.key, required int selectedIndex});
 
   @override
   State<Widgetbar> createState() => _WidgetbarState();
@@ -62,7 +62,7 @@ class _WidgetbarState extends State<Widgetbar> {
           if (value == 3) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BillPage()),
+              MaterialPageRoute(builder: (context) => const MyTicketsPage()),
             );
           }
         });

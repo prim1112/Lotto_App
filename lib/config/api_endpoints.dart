@@ -11,4 +11,12 @@ class ApiEndpoints {
   // prim
   static const String getAllTickets = "$_baseUrl/admin/tickets";
   static const String purchaseTicket = "$_baseUrl/purchase";
+  static String getUserTickets(String userId) {
+    return '$_baseUrl/users/$userId/tickets';
+  }
+
+  static const String claim = '$_baseUrl/prizes/claim';
+  static const String resetSystem = '$_baseUrl/admin/reset-system';
+  static const String markAsChecked = '$_baseUrl/users/mark-as-checked';
+  static const String resetAllUsers = '$_baseUrl/admin/reset-all-users';
 }
