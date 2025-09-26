@@ -91,6 +91,28 @@ class _EditPageState extends State<EditPage> {
                       )
                     : const Text('Reset All'),
               ),
+              const SizedBox(height: 10), // เพิ่มระยะห่าง
+
+              FilledButton(
+                // ใช้ฟังก์ชันเดิมได้เลย เพราะทำงานเหมือนกัน
+                onPressed: _isResetting ? null : _showConfirmResetDialog,
+                style: FilledButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  // ใช้สีอื่นเพื่อแยกความแตกต่าง
+                  backgroundColor: Colors.blue[800],
+                  minimumSize: const Size(150, 40),
+                ),
+                child: _isResetting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('ลบข้อมูล User'), // เปลี่ยนข้อความ
+              ),
               const SizedBox(height: 20),
 
               // ปุ่ม Generate Tickets
@@ -293,6 +315,105 @@ class _EditPageState extends State<EditPage> {
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  void _showConfirmResetDialog() {
+    final secretKeyController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'ยืนยันการลบข้อมูล',
+          style: TextStyle(color: Colors.red),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'การกระทำนี้จะลบผู้ใช้และข้อมูลที่เกี่ยวข้องทั้งหมด (ยกเว้น Admin) และไม่สามารถย้อนกลับได้',
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: secretKeyController,
+              obscureText: true, // ซ่อนรหัสผ่าน
+              decoration: const InputDecoration(
+                labelText: 'กรุณากรอก Secret Key',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('ยกเลิก'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () {
+              final secretKey = secretKeyController.text.trim();
+              if (secretKey.isNotEmpty) {
+                Navigator.pop(context); // ปิด Dialog ก่อน
+                _resetAllUsers(secretKey); // เรียกฟังก์ชันลบข้อมูล
+              } else {
+                // อาจจะแสดงข้อความเตือนว่าต้องกรอก Key
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('กรุณากรอก Secret Key')),
+                );
+              }
+            },
+            child: const Text('ยืนยันการลบ'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 2. ฟังก์ชันสำหรับส่ง Request ไปยัง Backend
+  Future<void> _resetAllUsers(String secretKey) async {
+    if (_isResetting) return; // ป้องกันการกดซ้ำ
+
+    setState(() => _isResetting = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.resetAllUsers),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'secret_key': secretKey}),
+      );
+
+      // ดึงข้อความจาก response
+      final responseData = jsonDecode(response.body);
+      final message = responseData['message'] ?? 'เกิดข้อผิดพลาดไม่ทราบสาเหตุ';
+
+      if (response.statusCode == 200) {
+        // สำเร็จ
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message), backgroundColor: Colors.green),
+        );
+      } else {
+        // ล้มเหลว (เช่น 403 ไม่ได้รับอนุญาต, 500 Server Error)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('ล้มเหลว: $message (Code: ${response.statusCode})'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      log('Reset all users error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('การเชื่อมต่อล้มเหลว: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isResetting = false);
+      }
     }
   }
 }

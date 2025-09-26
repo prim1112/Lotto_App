@@ -18,4 +18,5 @@ class ApiEndpoints {
   static const String claim = '$_baseUrl/prizes/claim';
   static const String resetSystem = '$_baseUrl/admin/reset-system';
   static const String markAsChecked = '$_baseUrl/users/mark-as-checked';
+  static const String resetAllUsers = '$_baseUrl/admin/reset-all-users';
 }

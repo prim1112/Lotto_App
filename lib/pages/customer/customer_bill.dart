@@ -54,21 +54,19 @@ class _MyTicketsPageState extends State<MyTicketsPage> {
         final decoded = jsonDecode(res.body);
         final list = decoded is List ? decoded : (decoded['data'] ?? []);
 
-        // --- START: แก้ไขส่วนนี้ ---
         final List<Map<String, dynamic>> allTickets =
             List<Map<String, dynamic>>.from(list);
 
-        // กรองสถานะ 'claimed' และ 'checked' ออกไป
+        // กรองเฉพาะสถานะ 'claimed' ออกไปเท่านั้น
         final List<dynamic> unHandledTickets = allTickets.where((ticket) {
           final status = ticket['status'];
-          return status != 'claimed' && status != 'checked';
+          return status != 'claimed';
         }).toList();
 
         setState(() {
           _userTickets = unHandledTickets;
           _isLoading = false;
         });
-        // --- END: แก้ไขส่วนนี้ ---
       } else {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -88,11 +86,11 @@ class _MyTicketsPageState extends State<MyTicketsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('สลากทั้งหมดของฉัน')),
-      backgroundColor: Color(0xFFCDEBFF),
+      backgroundColor: const Color(0xFFCDEBFF),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _userTickets.isEmpty
-          ? const Center(child: Text('คุณยังไม่มีสลากที่ซื้อ'))
+          ? const Center(child: Text('คุณยังไม่มีสลาก'))
           : ListView.builder(
               padding: const EdgeInsets.all(8.0),
               itemCount: _userTickets.length,
@@ -120,8 +118,23 @@ class UserTicketCard extends StatefulWidget {
 
 class _UserTicketCardState extends State<UserTicketCard> {
   bool _isChecking = false;
-  bool _claimed = false;
+  bool _isClaimed = false;
+  bool _isAlreadyChecked = false;
   String? _statusText;
+
+  @override
+  void initState() {
+    super.initState();
+    final String initialStatus = widget.ticketData['status'] ?? 'available';
+
+    if (initialStatus == 'checked') {
+      _isAlreadyChecked = true;
+      _statusText = 'ตรวจแล้ว: ไม่ถูกรางวัล';
+    } else if (initialStatus == 'claimed') {
+      _isClaimed = true;
+      _statusText = 'ขึ้นเงินรางวัลแล้ว';
+    }
+  }
 
   Future<void> checkLottery() async {
     if (_isChecking) return;
@@ -168,8 +181,6 @@ class _UserTicketCardState extends State<UserTicketCard> {
       }
 
       if (prizeName != null && reward != null) {
-        // --- START: แก้ไขส่วนนี้ ---
-        // 1. เปลี่ยนชื่อตัวแปรให้สื่อความหมายมากขึ้น
         final dynamic result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -182,31 +193,31 @@ class _UserTicketCardState extends State<UserTicketCard> {
           ),
         );
 
-        // 2. ตรวจสอบว่าค่าที่ได้กลับมาไม่ใช่ null และเป็นตัวเลข (double)
         if (result != null && result is double && mounted) {
           final double newBalance = result;
-
-          // 3. (สำคัญที่สุด) อัปเดตยอดเงินใน UserSession
           UserSession().currentUser?.walletBalance = newBalance;
-
-          // 4. อัปเดต UI ของการ์ดใบนี้และรีโหลดรายการ
           setState(() {
-            _claimed = true;
+            _isClaimed = true;
             _statusText = 'ขึ้นเงินรางวัลแล้ว';
           });
-
           await widget.onReload?.call();
-
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('ยอดเงินใน Wallet ได้รับการอัปเดตแล้ว'),
             ),
           );
         }
-        // --- END: แก้ไขส่วนนี้ ---
       } else {
         if (!mounted) return;
-        await _markTicketAsChecked(ticketNumber); // ยิงแล้วไปเลย
+
+        final bool marked = await _markTicketAsChecked(ticketNumber);
+
+        if (marked && mounted) {
+          setState(() {
+            _isAlreadyChecked = true;
+            _statusText = 'ตรวจแล้ว: ไม่ถูกรางวัล';
+          });
+        }
 
         await Navigator.push(
           context,
@@ -228,9 +239,14 @@ class _UserTicketCardState extends State<UserTicketCard> {
     }
   }
 
+  String _getButtonText() {
+    if (_isClaimed) return 'ขึ้นเงินแล้ว';
+    if (_isAlreadyChecked) return 'ตรวจแล้ว';
+    return 'ตรวจสลาก';
+  }
+
   @override
   Widget build(BuildContext context) {
-    // ✅ FIX #2: Use the correct key 'ticket_id' for display
     final String ticketNumber = widget.ticketData['ticket_number'].toString();
 
     return Card(
@@ -288,8 +304,8 @@ class _UserTicketCardState extends State<UserTicketCard> {
                   _statusText!,
                   style: TextStyle(
                     fontSize: 14,
-                    color: _claimed ? Colors.green[700] : Colors.black54,
-                    fontWeight: _claimed ? FontWeight.bold : FontWeight.normal,
+                    color: _isClaimed ? Colors.green[700] : Colors.red[700],
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -305,7 +321,9 @@ class _UserTicketCardState extends State<UserTicketCard> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFF59D),
                   ),
-                  onPressed: (_isChecking || _claimed) ? null : checkLottery,
+                  onPressed: (_isChecking || _isClaimed || _isAlreadyChecked)
+                      ? null
+                      : checkLottery,
                   child: _isChecking
                       ? const SizedBox(
                           height: 20,
@@ -313,7 +331,7 @@ class _UserTicketCardState extends State<UserTicketCard> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          _claimed ? 'ขึ้นเงินแล้ว' : 'ตรวจสลาก',
+                          _getButtonText(),
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -333,26 +351,24 @@ class _UserTicketCardState extends State<UserTicketCard> {
     if (userId == null) return false;
 
     try {
-      // 1. รับค่า response ที่ส่งกลับมาจาก Server
       final res = await http.post(
         Uri.parse(ApiEndpoints.markAsChecked),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'userId': userId, 'ticketNumber': ticketNumber}),
       );
 
-      // 2. ตรวจสอบ statusCode ว่าทำงานสำเร็จหรือไม่ (200 คือสำเร็จ)
       if (res.statusCode == 200) {
         log('Successfully marked ticket $ticketNumber as checked.');
-        return true; // 3. คืนค่า true เมื่อสำเร็จ
+        return true;
       } else {
         log(
           'Failed to mark ticket as checked. Status: ${res.statusCode}, Body: ${res.body}',
         );
-        return false; // 3. คืนค่า false เมื่อล้มเหลว
+        return false;
       }
     } catch (e) {
       log('Error marking ticket as checked: $e');
-      return false; // 3. คืนค่า false เมื่อมี Error
+      return false;
     }
   }
 }

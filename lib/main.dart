@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lotto Application',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const LoginPage(), // <-- หรือหน้าที่คุณต้องการให้เป็นหน้าแรก
+      home: const LoginPage(),
     );
   }
 }
